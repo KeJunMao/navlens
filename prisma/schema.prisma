@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("NUXT_DATABASE_URL")
+}
+
+model Group {
+  id   Int     @id @default(autoincrement())
+  code String  @unique
+  name String
+  icon String?
+
+  categories Category[]
+}
+
+model Category {
+  id   Int     @id @default(autoincrement())
+  name String
+  icon String?
+
+  sites   CategoriesOnSites[]
+  group   Group               @relation(fields: [groupId], references: [id])
+  groupId Int
+}
+
+model Site {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  icon        String?
+  urls        Url[]
+
+  categories CategoriesOnSites[]
+}
+
+model Url {
+  id    Int     @id @default(autoincrement())
+  link  String
+  label String?
+
+  Site   Site @relation(fields: [siteId], references: [id])
+  siteId Int
+}
+
+model CategoriesOnSites {
+  site       Site     @relation(fields: [siteId], references: [id])
+  siteId     Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  @@id([siteId, categoryId])
+}
