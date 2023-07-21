@@ -1,43 +1,57 @@
 <script setup lang="ts">
+const emit = defineEmits<{
+  (event: "select"): void;
+}>();
 const commandPaletteRef = ref();
-
-const suggestions = [
-  { id: "linear", label: "Linear", icon: "i-simple-icons-linear" },
-  { id: "figma", label: "Figma", icon: "i-simple-icons-figma" },
-  { id: "slack", label: "Slack", icon: "i-simple-icons-slack" },
-  { id: "youtube", label: "YouTube", icon: "i-simple-icons-youtube" },
-  { id: "github", label: "GitHub", icon: "i-simple-icons-github" },
-];
-
-const commands = [
-  {
-    id: "clipboard-history",
-    label: "Clipboard History",
-    icon: "i-heroicons-clipboard",
-    click: () => alert("New file"),
-  },
-  {
-    id: "import-extension",
-    label: "Import Extension",
-    icon: "i-heroicons-wrench-screwdriver",
-    click: () => alert("New folder"),
-  },
-  {
-    id: "manage-extensions",
-    label: "Manage Extensions",
-    icon: "i-heroicons-wrench-screwdriver",
-    click: () => alert("Add hashtag"),
-  },
-];
+const colorMode = useColorMode();
 
 const groups = [
   {
-    key: "suggestions",
-    label: "Suggestions",
-    inactive: "Application",
-    commands: suggestions,
+    key: "commands",
+    label: "命令",
+    commands: [
+      {
+        id: "switch-theme",
+        label: "切换颜色模式",
+        icon: "i-heroicons-sun",
+        click: () => {
+          colorMode.value = colorMode.value === "dark" ? "light" : "dark";
+        },
+      },
+      {
+        id: "goto-admin",
+        label: "前往后台管理",
+        icon: "i-heroicons-server",
+        to: "/_admin",
+      },
+      {
+        id: "goto-front",
+        label: "前往前台查看",
+        icon: "i-heroicons-squares-2x2-solid",
+        to: "/",
+      },
+    ],
+  },
+  {
+    key: "todo",
+    label: "代办",
+    inactive: "站点",
+    commands: [
+      { id: "linear", label: "开发中", icon: "i-simple-icons-linear" },
+    ],
   },
 ];
+
+function onSelect(option: any) {
+  if (option.click) {
+    option.click();
+  } else if (option.to) {
+    navigateTo(option.to);
+  } else if (option.href) {
+    window.open(option.href, "_blank");
+  }
+  emit("select");
+}
 
 const ui = {
   wrapper:
@@ -70,9 +84,9 @@ const ui = {
   <UCommandPalette
     ref="commandPaletteRef"
     :groups="groups"
-    icon=""
     :ui="ui"
     :autoselect="false"
     placeholder="搜索应用或命令"
+    @update:model-value="onSelect"
   />
 </template>
