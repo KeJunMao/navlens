@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 const group = useGroup();
 const { data: categories } = useFetch(
-  `/api/category?groupId=${group.value.id}`,
+  `/api/category?groupId=${group.value?.id}`,
   {
-    key: `categoryByGroupId-${group.value.id}`,
+    key: `categoryByGroupId-${group.value?.id}`,
   }
 );
 useSeoMeta({
-  title: group.value.name,
+  title: group.value?.name,
 });
 </script>
 

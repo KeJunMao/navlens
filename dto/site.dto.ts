@@ -5,12 +5,14 @@ export const createSiteDtoSchema = z.object({
   description: z.string().max(64).optional(),
   icon: z.string().max(64).optional(),
   categoryIds: z.array(z.coerce.number()),
-  urls: z.array(
-    z.object({
-      link: z.string(),
-      label: z.string(),
-    })
-  ),
+  urls: z
+    .array(
+      z.object({
+        link: z.string().url(),
+        label: z.string(),
+      })
+    )
+    .length(1),
 });
 
 export type CreateSiteDto = z.infer<typeof createSiteDtoSchema>;

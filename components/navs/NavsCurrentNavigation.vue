@@ -2,10 +2,13 @@
 const group = useGroup();
 const { data: categories } = useNuxtData(`categoryByGroupId-${group.value.id}`);
 const links = computed(() =>
-  categories.value?.map((v: any) => ({
-    label: v.name,
-    click: () => {},
-  }))
+  categories.value?.map(
+    (v: any) =>
+      ({
+        label: v.name,
+        click: () => {},
+      } ?? [])
+  )
 );
 </script>
 <template>

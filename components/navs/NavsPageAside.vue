@@ -4,7 +4,7 @@
   >
     <div class="relative">
       <NavsSiteNavigation />
-      <NavsCurrentNavigation />
+      <!-- <NavsCurrentNavigation /> -->
     </div>
   </aside>
 </template>

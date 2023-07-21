@@ -2,7 +2,7 @@
 const { data: groups } = useNuxtData("groups");
 
 const links = computed(() =>
-  groups.value.map((v) => ({
+  groups.value?.map((v) => ({
     label: v.name,
     to: `/${v.code}`,
     ...v,

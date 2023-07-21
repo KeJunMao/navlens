@@ -1,5 +1,6 @@
 <template>
   <AppLayout>
+    <UNotifications />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -11,7 +12,7 @@ await useFetch(`/api/group`, {
   key: `groups`,
 });
 useHead({
-  titleTemplate: (title) =>
+  titleTemplate: (title = 'NavLens') =>
     title && title.includes("NavLens") ? title : `${title} - NavLens`,
   bodyAttrs: {
     class:
