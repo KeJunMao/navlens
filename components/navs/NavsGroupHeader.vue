@@ -6,6 +6,6 @@ defineProps<{
 <template>
   <h1 class="text-2xl leading-loose mb-8 flex justify-between items-center">
     {{ group?.name }}
-    <Icon class="text-gray-500 dark:text-gray-400" v-if="group?.icon" :name="group.icon" />
+    <FetchIcon class="text-gray-500 dark:text-gray-400" v-if="group?.icon" :name="group.icon" />
   </h1>
 </template>

@@ -19,7 +19,7 @@ const links = computed(() =>
   >
     <template #icon="{ link }">
       <div class="z-[1]">
-        <Icon :name="link.icon" />
+        <FetchIcon :name="link.icon" />
       </div>
     </template>
   </UVerticalNavigation>

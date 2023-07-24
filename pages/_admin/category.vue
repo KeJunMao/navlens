@@ -89,7 +89,7 @@ const acitons = (row: any) => [
 
     <UTable :rows="category" :columns="columns" :loading="pending">
       <template #icon-data="{ row }">
-        <Icon v-if="row?.icon" :name="row.icon" class="text-xl" />
+        <FetchIcon v-if="row?.icon" :name="row.icon" class="text-xl" />
         <template v-else>无</template>
       </template>
       <template #actions-data="{ row }">
