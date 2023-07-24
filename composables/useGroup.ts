@@ -1,5 +1,14 @@
-import type { Group } from "@prisma/client";
+import type { Group, Category, Site, Url } from "@prisma/client";
 
 export function useGroup() {
-  return useState<Group | undefined>("group", () => undefined);
+  return useState<
+    | (Group & {
+        categories?: (Category & {
+          sites: (Site & {
+            urls: Url[];
+          })[];
+        })[];
+      })
+    | undefined
+  >("group", () => undefined);
 }

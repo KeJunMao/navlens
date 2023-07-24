@@ -8,7 +8,7 @@ const q = ref("");
 const toast = useToast();
 
 const form = ref<InstanceType<typeof AdminGroupForm> | null>();
-const { data: groups, pending, refresh } = useFetch(`/api/group?q=${q.value}`);
+const { data: groups, pending, refresh } = useFetch(`/api/admin/group?q=${q.value}`);
 const columns = [
   {
     key: "id",
@@ -60,7 +60,7 @@ const acitons = (row: any) => [
               color: "primary",
               label: "确认",
               click: async () => {
-                await $fetch(`/api/group/${row.id}`, {
+                await $fetch(`/api/admin/group/${row.id}`, {
                   method: "DELETE",
                 });
                 refresh()
@@ -76,14 +76,6 @@ const acitons = (row: any) => [
 
 <template>
   <AdminGroupForm ref="form" @refresh="refresh" />
-  <!-- <UModal v-model="isOpen">
-    <UNotification
-      :actions="[
-        { variant: 'solid', color: 'primary', label: 'Action 1' },
-        { variant: 'outline', color: 'primary', label: 'Action 2' },
-      ]" title="Warning" id="delete_confirm"
-    />
-  </UModal> -->
   <UCard>
     <template #header>
       <div class="flex space-x-2 justify-between">

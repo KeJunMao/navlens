@@ -8,7 +8,7 @@ const q = ref("");
 const toast = useToast();
 
 const form = ref<InstanceType<typeof AdminSiteForm> | null>();
-const { data: sites, pending, refresh } = useFetch(`/api/site?q=${q.value}`);
+const { data: sites, pending, refresh } = useFetch(`/api/admin/site?q=${q.value}`);
 const columns = [
   {
     key: "id",
@@ -59,7 +59,7 @@ const acitons = (row: any) => [
               color: "primary",
               label: "确认",
               click: async () => {
-                await $fetch(`/api/site/${row.id}`, {
+                await $fetch(`/api/admin/site/${row.id}`, {
                   method: "DELETE",
                 });
                 refresh();

@@ -3,13 +3,7 @@ definePageMeta({
   middleware: "group",
 });
 const group = useGroup();
-
-const { data: categories } = useFetch(
-  `/api/category?groupId=${group.value?.id}`,
-  {
-    key: `categoryByGroupId-${group.value?.id}`,
-  }
-);
+const categories = computed(() => group.value?.categories);
 useSeoMeta({
   title: group.value?.name,
 });

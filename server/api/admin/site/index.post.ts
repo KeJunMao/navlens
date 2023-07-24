@@ -1,5 +1,3 @@
-import { createSiteDtoSchema } from "../../../dto/site.dto";
-
 export default defineApi(async (event) => {
   const prisma = usePrisma();
   const body = await readBody(event);

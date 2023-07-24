@@ -8,7 +8,7 @@ const q = ref("");
 const toast = useToast();
 
 const form = ref<InstanceType<typeof AdminCategoryForm> | null>();
-const { data: category, pending, refresh } = useFetch(`/api/category?q=${q.value}`);
+const { data: category, pending, refresh } = useFetch(`/api/admin/category?q=${q.value}`);
 const columns = [
   {
     key: "id",
@@ -56,7 +56,7 @@ const acitons = (row: any) => [
               color: "primary",
               label: "确认",
               click: async () => {
-                await $fetch(`/api/category/${row.id}`, {
+                await $fetch(`/api/admin/category/${row.id}`, {
                   method: "DELETE",
                 });
                 refresh()

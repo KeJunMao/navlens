@@ -11,12 +11,12 @@ const { isOpen, setup, close, title, data, save, errors, clearError, loading } =
 
 async function saveHandler(body: any) {
   if (body.id) {
-    await $fetch(`/api/group/${body.id}`, {
+    await $fetch(`/api/admin/group/${body.id}`, {
       method: "PUT",
       body,
     })
   } else {
-    await $fetch("/api/group", {
+    await $fetch("/api/admin/group", {
       method: "POST",
       body,
     });

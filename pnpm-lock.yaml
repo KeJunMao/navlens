@@ -22,7 +22,7 @@ devDependencies:
     specifier: latest
     version: 0.7.1(nuxt@3.6.3)(vite@4.4.5)
   '@nuxthq/ui':
-    specifier: ^2.6.0
+    specifier: github:romhml/ui#feat-form-component
     version: 2.6.0(vue@3.3.4)(webpack@5.88.2)
   '@types/node':
     specifier: ^18.16.19

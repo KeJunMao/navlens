@@ -11,12 +11,12 @@ const { isOpen, setup, close, title, data, save, errors, clearError, loading } =
 
 async function saveHandler(body: any) {
   if (body.id) {
-    await $fetch(`/api/category/${body.id}`, {
+    await $fetch(`/api/admin/category/${body.id}`, {
       method: "PUT",
       body,
     });
   } else {
-    await $fetch("/api/category", {
+    await $fetch("/api/admin/category", {
       method: "POST",
       body,
     });
@@ -25,7 +25,7 @@ async function saveHandler(body: any) {
 }
 
 const search = async (q: string) => {
-  const groups = await $fetch("/api/group", {
+  const groups = await $fetch("/api/admin/group", {
     query: { q },
   });
 
