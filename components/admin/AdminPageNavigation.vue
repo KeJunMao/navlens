@@ -22,6 +22,12 @@ const links = [
   <div
     class="hidden py-8 overflow-y-auto lg:block lg:top-[65px] lg:max-h-[calc(100vh-65px)] lg:sticky lg:pr-8 lg:pl-[2px]"
   >
-    <UVerticalNavigation :links="links"> </UVerticalNavigation>
+    <UVerticalNavigation
+      :links="links"
+      :ui="{
+        size: 'text-md',
+      }"
+    >
+    </UVerticalNavigation>
   </div>
 </template>

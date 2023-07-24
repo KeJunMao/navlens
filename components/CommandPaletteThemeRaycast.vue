@@ -11,9 +11,6 @@ const commandPaletteRef = ref<InstanceType<typeof UCommandPalette>>();
 const colorMode = useColorMode();
 const groupsData = useGroups();
 const group = useGroup();
-const { data: categories } = useNuxtData(
-  `categoryByGroupId-${group.value?.id}`
-);
 
 const commandsGroup = {
   key: "commands",
@@ -43,7 +40,7 @@ const commandsGroup = {
 };
 
 const siteGroup = computed<Group[]>(() => {
-  return categories.value.map(
+  return group.value?.categories?.map(
     (v: Category & { sites: (Site & { urls: Url[] })[] }) => {
       return {
         key: `category-${v.id}`,
@@ -85,7 +82,7 @@ const siteGroup = computed<Group[]>(() => {
           .flat(),
       };
     }
-  );
+  ) ?? []
 });
 const groupGroup = computed<Group>(() => {
   return {
