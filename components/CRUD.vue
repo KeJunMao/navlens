@@ -99,7 +99,6 @@ const acitons = (row: any) => [
           title: "确认要删除吗？",
           description: "删除后将无法还原！",
           color: "red",
-          timeout: 0,
           actions: [
             {
               variant: "solid",
@@ -134,6 +133,7 @@ const createForm = ref<Form<createSchema>>();
 const createState = ref<Record<string, any>>({
   ...clone(props.defaultCreateState),
 });
+const saveLoading = ref(false);
 
 async function createSubmit() {
   const body = props.saveDataTransform?.(createState.value);
@@ -141,18 +141,32 @@ async function createSubmit() {
   const mode = createModalState.value.mode;
   emit(mode as any, searchState.value);
 
-  if (mode === "create") {
-    $fetch(`${props.apiPath}`, {
-      method: "post",
-      body,
+  try {
+    saveLoading.value = true;
+    if (mode === "create") {
+      await $fetch(`${props.apiPath}`, {
+        method: "post",
+        body,
+      });
+    } else {
+      await $fetch(`${props.apiPath}/${body.id}`, {
+        method: "put",
+        body,
+      });
+    }
+    searchRefresh();
+    createModalState.value.show = false;
+    toast.add({
+      title: "保存成功",
     });
-  } else {
-    $fetch(`${props.apiPath}/${body.id}`, {
-      method: "put",
-      body,
+  } catch (error: any) {
+    toast.add({
+      title: "保存失败",
+      description: error.message,
     });
+  } finally {
+    saveLoading.value = false;
   }
-  searchRefresh();
 }
 
 const createModalState = ref<{
@@ -274,10 +288,16 @@ defineExpose({
         ></slot>
         <UFormGroup>
           <div class="flex space-x-2" v-if="createModalState.mode !== 'view'">
-            <UButton color="primary" type="submit" icon="i-heroicons-check">
+            <UButton
+              color="primary"
+              type="submit"
+              icon="i-heroicons-check"
+              :loading="saveLoading"
+            >
               保存
             </UButton>
             <UButton
+              :disabled="saveLoading"
               icon="i-heroicons-x-mark-solid"
               color="white"
               @click="createModalState.show = false"

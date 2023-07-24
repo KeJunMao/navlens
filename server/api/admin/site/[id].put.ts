@@ -20,14 +20,13 @@ export default defineApi(async (event) => {
         },
         upsert: urls.map(({ id, ...url }) => ({
           where: {
-            id,
+            id: id ? id : -1,
           },
           update: {
             ...url,
           },
           create: {
             ...url,
-            siteId,
           },
         })),
       },

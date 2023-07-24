@@ -19,6 +19,7 @@ export const defineApi = (handler: EventHandler) =>
       const response = await handler(event);
       return response;
     } catch (err) {
+      console.log(err)
       if (err instanceof ZodError) {
         err = createError({
           statusCode: 400,
