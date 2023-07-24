@@ -31,28 +31,28 @@ const search = async (q: string) => {
         label: data.groupName,
       } : null
     })"
-    :saveDataTransform="({group, ...data}: any)=> ({
+    :saveDataTransform="({group={}, ...data}: any)=> ({
       ...data,
-      groupId: group.id
+      groupId: group?.id
     })"
   >
     <template #search="{ state }">
-      <UFormGroup label="名称" path="name">
+      <UiFormGroup label="名称" path="name">
         <UInput placeholder="请输入名称" v-model="state.name" />
-      </UFormGroup>
+      </UiFormGroup>
       <UFormGroup label="所属组名称" path="groupName">
         <UInput placeholder="请输入所属组名称" v-model="state.groupName" />
       </UFormGroup>
     </template>
     <template #create="{ state, isView }">
-      <UFormGroup label="名称" path="name">
+      <UiFormGroup label="名称" path="name">
         <UInput
           placeholder="请输入名称"
           v-model="state.name"
           :readonly="isView"
         />
-      </UFormGroup>
-      <UFormGroup name="group" label="分组" path="group">
+      </UiFormGroup>
+      <UiFormGroup name="group" label="分组" path="groupId">
         <template v-if="isView">
           <UInput :value="state.groupName" readonly />
         </template>
@@ -63,8 +63,8 @@ const search = async (q: string) => {
           placeholder="请搜索并选择分组"
           by="id"
         />
-      </UFormGroup>
-      <UFormGroup
+      </UiFormGroup>
+      <UiFormGroup
         label="图标"
         path="icon"
         description="访问 https://icones.js.org 预览所有图标"
@@ -74,7 +74,7 @@ const search = async (q: string) => {
           v-model="state.icon"
           :readonly="isView"
         />
-      </UFormGroup>
+      </UiFormGroup>
     </template>
   </CRUD>
 </template>

@@ -88,7 +88,7 @@ const defaultUrl = {
           :readonly="isView"
         />
       </UiFormGroup>
-      <UiFormGroup name="categories" label="所属类" path="categories">
+      <UiFormGroup name="categories" label="所属类" path="categoryIds">
         <template v-if="isView">
           <UInput
             :value="state.categories.map((v:any) => v.name).join(', ')"

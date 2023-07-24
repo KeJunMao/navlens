@@ -4,7 +4,7 @@ export const createSiteDtoSchema = z.object({
   name: z.string().min(1).max(16),
   description: z.string().max(64).optional(),
   icon: z.string().max(64).optional(),
-  categoryIds: z.array(z.coerce.number()),
+  categoryIds: z.array(z.coerce.number()).min(1),
   urls: z
     .array(
       z.object({
