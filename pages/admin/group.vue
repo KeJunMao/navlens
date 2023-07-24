@@ -5,7 +5,11 @@ const crud = ref<InstanceType<typeof CRUD>>();
 </script>
 
 <template>
-  <CRUD ref="crud" :search-schema="searchGroupDtoSchema" search-url="/api/admin/group">
+  <CRUD
+    ref="crud"
+    :search-schema="searchGroupDtoSchema"
+    search-url="/api/admin/group"
+  >
     <template #search="{ state }">
       <UFormGroup label="Name" path="name">
         <UInput v-model="state.name" />
