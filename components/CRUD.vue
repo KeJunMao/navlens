@@ -99,6 +99,7 @@ const acitons = (row: any) => [
           title: "确认要删除吗？",
           description: "删除后将无法还原！",
           color: "red",
+          timeout: 0,
           actions: [
             {
               variant: "solid",

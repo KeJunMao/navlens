@@ -7,9 +7,13 @@ export default defineApi(async (event) => {
     .findMany({
       where: {
         group: {
-          name: data.groupName,
+          name: {
+            contains: data.groupName,
+          },
         },
-        name: data.name,
+        name: {
+          contains: data.name,
+        },
       },
       include: {
         group: {

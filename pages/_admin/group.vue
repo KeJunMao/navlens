@@ -1,110 +1,50 @@
 <script lang="ts" setup>
-import { AdminGroupForm } from "#components";
-
-useSeoMeta({
-  title: "Group",
-});
-const q = ref("");
-const toast = useToast();
-
-const form = ref<InstanceType<typeof AdminGroupForm> | null>();
-const { data: groups, pending, refresh } = useFetch(`/api/admin/group?q=${q.value}`);
-const columns = [
-  {
-    key: "id",
-    label: "ID",
-    class: "w-6",
-  },
-  {
-    key: "name",
-    label: "名称",
-  },
-  {
-    key: "code",
-    label: "编码",
-  },
-  {
-    key: "icon",
-    label: "图标",
-    class: "w-1/6",
-  },
-  {
-    key: "actions",
-    class: "w-5",
-  },
-];
-const acitons = (row: any) => [
-  [
-    {
-      label: "编辑",
-      icon: "i-heroicons-pencil-square-20-solid",
-      click: () => form.value?.setup("update", row),
-    },
-    {
-      label: "复制",
-      icon: "i-heroicons-document-duplicate-20-solid",
-    },
-  ],
-  [
-    {
-      label: "删除",
-      icon: "i-heroicons-trash-20-solid",
-      slot: "delete",
-      click: () => {
-        toast.add({
-          title: "确认要删除吗？",
-          description: "删除分组将删除该分组下的所有数据",
-          actions: [
-            {
-              variant: "solid",
-              color: "primary",
-              label: "确认",
-              click: async () => {
-                await $fetch(`/api/admin/group/${row.id}`, {
-                  method: "DELETE",
-                });
-                refresh()
-              },
-            },
-          ],
-        });
-      },
-    },
-  ],
-];
+import { CRUD } from "#components";
+import { searchGroupDtoSchema, createGroupDtoSchema } from "@/dto/group.dto";
+const crud = ref<InstanceType<typeof CRUD>>();
 </script>
 
 <template>
-  <AdminGroupForm ref="form" @refresh="refresh" />
-  <UCard>
-    <template #header>
-      <div class="flex space-x-2 justify-between">
-        <div class="flex space-x-2">
-          <UInput v-model="q" placeholder="关键词搜索" />
-        </div>
-        <UButton
-          icon="i-heroicons-plus-circle"
-          color="gray"
-          @click="form?.setup()"
-          >新增</UButton
-        >
-      </div>
+  <CRUD
+    ref="crud"
+    :search-schema="searchGroupDtoSchema"
+    :create-schema="createGroupDtoSchema"
+    api-path="/api/admin/group"
+  >
+    <template #search="{ state }">
+      <UFormGroup label="名称" path="name">
+        <UInput placeholder="请输入名称" v-model="state.name" />
+      </UFormGroup>
+      <UFormGroup label="编码" path="code">
+        <UInput placeholder="请输入编码" v-model="state.code" />
+      </UFormGroup>
     </template>
-
-    <UTable :rows="groups" :columns="columns" :loading="pending">
-      <template #icon-data="{ row }">
-        <FetchIcon v-if="row?.icon" :name="row.icon" class="text-xl" />
-        <template v-else>无</template>
-      </template>
-      <template #actions-data="{ row }">
-        <UDropdown :items="acitons(row)">
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-ellipsis-horizontal-20-solid"
-          />
-        </UDropdown>
-      </template>
-    </UTable>
-  </UCard>
+    <template #create="{ state, isView }">
+      <UFormGroup label="名称" path="name">
+        <UInput
+          placeholder="请输入名称"
+          v-model="state.name"
+          :readonly="isView"
+        />
+      </UFormGroup>
+      <UFormGroup label="编码" path="code">
+        <UInput
+          placeholder="请输入编码"
+          v-model="state.code"
+          :readonly="isView"
+        />
+      </UFormGroup>
+      <UFormGroup
+        label="图标"
+        path="icon"
+        description="访问 https://icones.js.org 预览所有图标"
+      >
+        <UInput
+          placeholder="请输入图标"
+          v-model="state.icon"
+          :readonly="isView"
+        />
+      </UFormGroup>
+    </template>
+  </CRUD>
 </template>

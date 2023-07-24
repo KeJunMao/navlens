@@ -8,11 +8,12 @@ export const createSiteDtoSchema = z.object({
   urls: z
     .array(
       z.object({
+        id: z.coerce.number().optional(),
         link: z.string().url(),
         label: z.string(),
       })
     )
-    .length(1),
+    .min(1),
 });
 
 export type CreateSiteDto = z.infer<typeof createSiteDtoSchema>;

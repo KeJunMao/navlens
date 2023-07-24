@@ -1,106 +1,80 @@
 <script lang="ts" setup>
-import { AdminCategoryForm } from "#components";
+import { CRUD } from "#components";
+import {
+  searchCategoryDtoSchema,
+  createCategoryDtoSchema,
+} from "@/dto/category.dto";
+const crud = ref<InstanceType<typeof CRUD>>();
 
-useSeoMeta({
-  title: "Category",
-});
-const q = ref("");
-const toast = useToast();
+const search = async (q: string) => {
+  const groups = await $fetch("/api/admin/group", {
+    query: { name: q },
+  });
 
-const form = ref<InstanceType<typeof AdminCategoryForm> | null>();
-const { data: category, pending, refresh } = useFetch(`/api/admin/category?q=${q.value}`);
-const columns = [
-  {
-    key: "id",
-    label: "ID",
-    class: "w-6",
-  },
-  {
-    key: "name",
-    label: "名称",
-  },
-  {
-    key: "icon",
-    label: "图标",
-    class: "w-1/6",
-  },
-  {
-    key: "actions",
-    class: "w-5",
-  },
-];
-const acitons = (row: any) => [
-  [
-    {
-      label: "编辑",
-      icon: "i-heroicons-pencil-square-20-solid",
-      click: () => form.value?.setup("update", row),
-    },
-    {
-      label: "复制",
-      icon: "i-heroicons-document-duplicate-20-solid",
-    },
-  ],
-  [
-    {
-      label: "删除",
-      icon: "i-heroicons-trash-20-solid",
-      slot: "delete",
-      click: () => {
-        toast.add({
-          title: "确认要删除吗？",
-          description: "删除分类将删除该分类下的所有数据",
-          actions: [
-            {
-              variant: "solid",
-              color: "primary",
-              label: "确认",
-              click: async () => {
-                await $fetch(`/api/admin/category/${row.id}`, {
-                  method: "DELETE",
-                });
-                refresh()
-              },
-            },
-          ],
-        });
-      },
-    },
-  ],
-];
+  return groups?.map((group: any) => ({
+    id: group.id,
+    label: group.name,
+  }));
+};
 </script>
 
 <template>
-  <AdminCategoryForm ref="form" @refresh="refresh" />
-  <UCard>
-    <template #header>
-      <div class="flex space-x-2 justify-between">
-        <div class="flex space-x-2">
-          <UInput v-model="q" placeholder="关键词搜索" />
-        </div>
-        <UButton
-          icon="i-heroicons-plus-circle"
-          color="gray"
-          @click="form?.setup()"
-          >新增</UButton
-        >
-      </div>
+  <CRUD
+    ref="crud"
+    :search-schema="searchCategoryDtoSchema"
+    :create-schema="createCategoryDtoSchema"
+    api-path="/api/admin/category"
+    :viewDataTransform="(data: any)=> ({
+      ...data,
+      group: data.groupId ? {
+        id: data.groupId,
+        label: data.groupName,
+      } : null
+    })"
+    :saveDataTransform="({group, ...data}: any)=> ({
+      ...data,
+      groupId: group.id
+    })"
+  >
+    <template #search="{ state }">
+      <UFormGroup label="名称" path="name">
+        <UInput placeholder="请输入名称" v-model="state.name" />
+      </UFormGroup>
+      <UFormGroup label="所属组名称" path="groupName">
+        <UInput placeholder="请输入所属组名称" v-model="state.groupName" />
+      </UFormGroup>
     </template>
-
-    <UTable :rows="category" :columns="columns" :loading="pending">
-      <template #icon-data="{ row }">
-        <FetchIcon v-if="row?.icon" :name="row.icon" class="text-xl" />
-        <template v-else>无</template>
-      </template>
-      <template #actions-data="{ row }">
-        <UDropdown :items="acitons(row)">
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-ellipsis-horizontal-20-solid"
-          />
-        </UDropdown>
-      </template>
-    </UTable>
-  </UCard>
+    <template #create="{ state, isView }">
+      <UFormGroup label="名称" path="name">
+        <UInput
+          placeholder="请输入名称"
+          v-model="state.name"
+          :readonly="isView"
+        />
+      </UFormGroup>
+      <UFormGroup name="group" label="分组" path="group">
+        <template v-if="isView">
+          <UInput :value="state.groupName" readonly />
+        </template>
+        <USelectMenu
+          v-else
+          v-model="state.group"
+          :searchable="search"
+          placeholder="请搜索并选择分组"
+          by="id"
+        />
+      </UFormGroup>
+      <UFormGroup
+        label="图标"
+        path="icon"
+        description="访问 https://icones.js.org 预览所有图标"
+      >
+        <UInput
+          placeholder="请输入图标"
+          v-model="state.icon"
+          :readonly="isView"
+        />
+      </UFormGroup>
+    </template>
+  </CRUD>
 </template>

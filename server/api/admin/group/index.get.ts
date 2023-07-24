@@ -5,7 +5,12 @@ export default defineApi(async (event) => {
 
   return prisma.group.findMany({
     where: {
-      ...data,
+      name: {
+        contains: data.name,
+      },
+      code: {
+        contains: data.code,
+      },
     },
   });
 });
