@@ -2,7 +2,7 @@ export default defineNuxtRouteMiddleware(async ({ params }) => {
   const { group: groupCode } = params;
   if (!groupCode) {
     throw createError({
-      statusCode: 400,
+      statusCode: 404,
       statusMessage: "无效分组",
     });
   }
@@ -13,4 +13,10 @@ export default defineNuxtRouteMiddleware(async ({ params }) => {
   }
   const group = useGroup();
   group.value = groups.value?.find((v: any) => v.code === groupCode)
+  if (!group.value) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "无效分组",
+    });
+  }
 });

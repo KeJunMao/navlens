@@ -1,4 +1,7 @@
 <template>
+  <slot name="header">
+    <NavsPageHeader />
+  </slot>
   <UContainer
     class="bg-white/75 dark:bg-gray-900/75 min-h-[calc(100vh-65px)] ring-1 ring-zinc-100 dark:ring-zinc-400/20"
   >
