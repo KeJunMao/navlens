@@ -1,4 +1,6 @@
 <script lang="ts" setup>
-navigateTo("/public");
+navigateTo("/public", {
+  replace: true,
+});
 </script>
 <template></template>
