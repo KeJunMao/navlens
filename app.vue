@@ -8,9 +8,6 @@
 </template>
 
 <script lang="ts" setup>
-await useFetch(`/api/group`, {
-  key: `groups`,
-});
 useHead({
   titleTemplate: (title = 'NavLens') =>
     title && title.includes("NavLens") ? title : `${title} - NavLens`,

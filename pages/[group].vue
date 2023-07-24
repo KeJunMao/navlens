@@ -1,5 +1,9 @@
 <script lang="ts" setup>
+definePageMeta({
+  middleware: "group",
+});
 const group = useGroup();
+
 const { data: categories } = useFetch(
   `/api/category?groupId=${group.value?.id}`,
   {

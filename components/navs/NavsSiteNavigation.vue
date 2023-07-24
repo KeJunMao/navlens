@@ -1,5 +1,5 @@
 <script setup>
-const { data: groups } = useNuxtData("groups");
+const groups = useGroups()
 
 const links = computed(() =>
   groups.value?.map((v) => ({
