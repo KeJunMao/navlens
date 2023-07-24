@@ -39,7 +39,10 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
   </DefineTemplate>
   <template v-if="onlyOne">
     <NuxtLink :to="onlyOne ? firstUrl?.link : false" target="_blank">
-      <UTooltip class="w-full" :text="`${firstUrl.label}: ${firstUrl.link}`">
+      <UTooltip
+        class="w-full"
+        :text="`${firstUrl.label ? firstUrl.label + ':' : ''}${firstUrl.link}`"
+      >
         <ReuseTemplate />
       </UTooltip>
     </NuxtLink>
