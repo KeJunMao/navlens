@@ -6,7 +6,8 @@ import { Form } from "@/types/form";
 const props = withDefaults(
   defineProps<{
     searchSchema: z.AnyZodObject;
-    searchUrl: string;
+    createSchema: z.AnyZodObject;
+    apiPath: string;
     columns?: any[];
   }>(),
   {}
@@ -14,6 +15,9 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (e: "search", data: any): void;
+  (e: "create", data: any): void;
+  (e: "update", data: any): void;
+  (e: "view", data: any): void;
 }>();
 
 const toast = useToast();
@@ -23,8 +27,13 @@ type searchSchema = z.output<typeof props.searchSchema>;
 const searchForm = ref<Form<searchSchema>>();
 const searchState = ref<Record<string, any>>({});
 
-const { data: rows, refresh: searchRefresh } = useFetch<any>(props.searchUrl, {
+const {
+  data: tableRows,
+  refresh: searchRefresh,
+  pending: searchLoading,
+} = useFetch<any>(props.apiPath, {
   query: searchState.value,
+  watch: false,
 });
 
 async function searchSubmit() {
@@ -38,7 +47,7 @@ async function searchSubmit() {
 const tableColumns = computed(() => {
   let columns = props.columns;
   if (!columns) {
-    columns = Object.keys(rows.value?.[0] ?? {}).map((key) => ({
+    columns = Object.keys(tableRows.value?.[0] ?? {}).map((key) => ({
       key,
       label: key.replace(/^\w/, (match) => match.toUpperCase()),
     }));
@@ -46,7 +55,9 @@ const tableColumns = computed(() => {
   return [
     ...columns,
     {
+      label: "操作",
       key: "actions",
+      class: "w-5",
     },
   ];
 });
@@ -55,11 +66,16 @@ const acitons = (row: any) => [
     {
       label: "编辑",
       icon: "i-heroicons-pencil-square-20-solid",
-      click: () => {},
+      click: () => {
+        showUpdateModal(row);
+      },
     },
     {
       label: "复制",
       icon: "i-heroicons-document-duplicate-20-solid",
+      click: () => {
+        showCreateModal(row);
+      },
     },
   ],
   [
@@ -71,13 +87,14 @@ const acitons = (row: any) => [
         toast.add({
           title: "确认要删除吗？",
           description: "删除后将无法还原！",
+          color: "red",
           actions: [
             {
               variant: "solid",
-              color: "primary",
+              color: "red",
               label: "确认",
               click: async () => {
-                await $fetch(`/${row.id}`, {
+                await $fetch(`${props.apiPath}/${row.id}`, {
                   method: "DELETE",
                 });
                 searchRefresh();
@@ -100,6 +117,60 @@ const tableSlots = computed(() => {
   return slots;
 });
 
+type createSchema = z.output<typeof props.searchSchema>;
+const createForm = ref<Form<createSchema>>();
+const createState = ref<Record<string, any>>({});
+
+async function createSubmit() {
+  await createForm.value!.validate();
+  const mode = createModalState.value.mode;
+  emit(mode as any, searchState.value);
+  const body = createState.value;
+  if (mode === "create") {
+    $fetch(`${props.apiPath}`, {
+      method: "post",
+      body,
+    });
+  } else {
+    $fetch(`${props.apiPath}/${body.id}`, {
+      method: "put",
+      body,
+    });
+  }
+  searchRefresh();
+}
+
+const createModalState = ref<{
+  show: boolean;
+  mode: "create" | "update" | "view";
+}>({
+  show: false,
+  mode: "create",
+});
+
+const createModalTitle = computed(() => {
+  if (createModalState.value.mode === "create") {
+    return "新增";
+  } else if (createModalState.value.mode === "update") {
+    return "编辑";
+  }
+  return "查看";
+});
+
+function showViewModal(data = {}) {
+  createModalState.value.mode = "view";
+  createModalState.value.show = true;
+  createState.value = data;
+}
+function showUpdateModal(data = {}) {
+  showViewModal(data);
+  createModalState.value.mode = "update";
+}
+function showCreateModal(data = {}) {
+  showViewModal(data);
+  createModalState.value.mode = "create";
+}
+
 defineExpose({
   searchState,
 });
@@ -117,27 +188,94 @@ defineExpose({
       >
         <slot name="search" :state="searchState"></slot>
         <UFormGroup>
-          <UButton type="submit"> 搜索 </UButton>
+          <div class="flex space-x-2">
+            <UButton
+              type="submit"
+              color="white"
+              icon="i-heroicons-magnifying-glass"
+            >
+              搜索
+            </UButton>
+            <UButton
+              color="primary"
+              icon="i-heroicons-plus-20-solid"
+              @click="showCreateModal"
+            >
+              新增
+            </UButton>
+          </div>
         </UFormGroup>
       </UiForm>
     </template>
-    <UTable :columns="tableColumns" :rows="rows">
+
+    <UTable :columns="tableColumns" :rows="tableRows" :loading="searchLoading">
       <template #icon-data="{ row }">
         <FetchIcon v-if="row?.icon" :name="row.icon" class="text-xl" />
         <template v-else>无</template>
       </template>
       <template #actions-data="{ row }">
-        <UDropdown :items="acitons(row)">
+        <div class="flex space-x-2">
           <UButton
             color="gray"
             variant="ghost"
-            icon="i-heroicons-ellipsis-horizontal-20-solid"
-          />
-        </UDropdown>
+            icon="i-heroicons-eye-20-solid"
+            @click="showViewModal(row)"
+          >
+            查看
+          </UButton>
+          <UDropdown :items="acitons(row)">
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-ellipsis-horizontal-20-solid"
+            />
+          </UDropdown>
+        </div>
       </template>
       <template v-for="(_, name) in tableSlots" #[name]="slotData">
         <slot :name="'table-' + name" v-bind="slotData" />
       </template>
     </UTable>
   </UCard>
+  <UModal v-model="createModalState.show">
+    <UCard>
+      <template #header> {{ createModalTitle }} </template>
+      <UiForm
+        ref="createForm"
+        :state="createState"
+        :schema="createSchema"
+        @submit.prevent.stop="createSubmit"
+        class="flex flex-col space-y-4"
+      >
+        <slot
+          name="create"
+          :state="createState"
+          :mode="createModalState.mode"
+          :isView="createModalState.mode === 'view'"
+        ></slot>
+        <UFormGroup>
+          <div class="flex space-x-2" v-if="createModalState.mode !== 'view'">
+            <UButton color="primary" type="submit" icon="i-heroicons-check">
+              保存
+            </UButton>
+            <UButton
+              icon="i-heroicons-x-mark-solid"
+              color="white"
+              @click="createModalState.show = false"
+            >
+              取消
+            </UButton>
+          </div>
+          <UButton
+            v-else
+            icon="i-heroicons-x-mark-solid"
+            color="primary"
+            @click="createModalState.show = false"
+          >
+            关闭
+          </UButton>
+        </UFormGroup>
+      </UiForm>
+    </UCard>
+  </UModal>
 </template>
