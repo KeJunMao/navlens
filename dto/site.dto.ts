@@ -16,3 +16,9 @@ export const createSiteDtoSchema = z.object({
 });
 
 export type CreateSiteDto = z.infer<typeof createSiteDtoSchema>;
+
+export const searchSiteDtoSchema = z.object({
+  name: z.string().max(16).optional(),
+  description: z.string().max(20).optional(),
+  categoryName: z.string().max(16).optional(),
+});

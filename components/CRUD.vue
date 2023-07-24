@@ -3,14 +3,25 @@ import { ref } from "vue";
 import { z } from "zod";
 import { Form } from "@/types/form";
 
+function clone(data: any = {}) {
+  return JSON.parse(JSON.stringify(data));
+}
+
 const props = withDefaults(
   defineProps<{
     searchSchema: z.AnyZodObject;
     createSchema: z.AnyZodObject;
     apiPath: string;
     columns?: any[];
+    defaultSearchState?: Record<string, any>;
+    defaultCreateState?: Record<string, any>;
+    viewDataTransform?: (data: any) => any;
+    saveDataTransform?: (data: any) => any;
   }>(),
-  {}
+  {
+    viewDataTransform: (data: any) => data,
+    saveDataTransform: (data: any) => data,
+  }
 );
 
 const emit = defineEmits<{
@@ -25,7 +36,7 @@ const current = getCurrentInstance();
 
 type searchSchema = z.output<typeof props.searchSchema>;
 const searchForm = ref<Form<searchSchema>>();
-const searchState = ref<Record<string, any>>({});
+const searchState = ref<Record<string, any>>({ ...props.defaultSearchState });
 
 const {
   data: tableRows,
@@ -119,13 +130,16 @@ const tableSlots = computed(() => {
 
 type createSchema = z.output<typeof props.searchSchema>;
 const createForm = ref<Form<createSchema>>();
-const createState = ref<Record<string, any>>({});
+const createState = ref<Record<string, any>>({
+  ...clone(props.defaultCreateState),
+});
 
 async function createSubmit() {
-  await createForm.value!.validate();
+  const body = props.saveDataTransform?.(createState.value);
+  await createForm.value!.validate(body);
   const mode = createModalState.value.mode;
   emit(mode as any, searchState.value);
-  const body = createState.value;
+
   if (mode === "create") {
     $fetch(`${props.apiPath}`, {
       method: "post",
@@ -160,7 +174,11 @@ const createModalTitle = computed(() => {
 function showViewModal(data = {}) {
   createModalState.value.mode = "view";
   createModalState.value.show = true;
-  createState.value = data;
+  createState.value = {
+    ...clone(props.defaultCreateState),
+    ...clone(data),
+  };
+  createState.value = props.viewDataTransform?.(createState.value);
 }
 function showUpdateModal(data = {}) {
   showViewModal(data);

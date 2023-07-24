@@ -1,30 +1,30 @@
-import { z } from "zod";
-
 export default defineApi(async (event) => {
   const prisma = usePrisma();
   const query = getQuery(event);
-  const groupId = z.coerce.number().optional().parse(query.groupId);
+  const data = searchCategoryDtoSchema.parse(query);
+
   return await prisma.category
     .findMany({
       where: {
-        groupId,
+        group: {
+          name: data.groupName,
+        },
+        name: data.name,
       },
       include: {
-        sites: {
-          include: {
-            site: {
-              include: {
-                urls: true,
-              },
-            },
+        group: {
+          select: {
+            name: true,
           },
         },
       },
     })
-    .then((result) =>
-      result.map((v) => ({
-        ...v,
-        sites: v.sites.map((v) => v.site),
-      }))
+    .then((v) =>
+      v.map(({ group, ...category }) => {
+        return {
+          ...category,
+          groupName: group.name,
+        };
+      })
     );
 });

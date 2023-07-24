@@ -82,12 +82,12 @@ export default defineComponent({
     provide("form-errors", errors);
     provide("form-events", bus);
 
-    async function getErrors(): Promise<FormError[]> {
-      let errs = await props.validate(props.state);
+    async function getErrors(state = props.state): Promise<FormError[]> {
+      let errs = await props.validate(state);
 
       if (props.schema) {
         if (isZodSchema(props.schema)) {
-          errs = errs.concat(await getZodErrors(props.state, props.schema));
+          errs = errs.concat(await getZodErrors(state, props.schema));
         } else {
           throw new Error("Form validation failed: Unsupported form schema");
         }
@@ -96,8 +96,8 @@ export default defineComponent({
       return errs;
     }
 
-    async function validate() {
-      errors.value = await getErrors();
+    async function validate(state: any) {
+      errors.value = await getErrors(state);
       if (errors.value.length > 0) {
         throw new Error(
           `Form validation failed: ${JSON.stringify(errors.value, null, 2)}`

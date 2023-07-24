@@ -7,3 +7,8 @@ export const createCategoryDtoSchema = z.object({
 });
 
 export type CreateCategoryDto = z.infer<typeof createCategoryDtoSchema>;
+
+export const searchCategoryDtoSchema = z.object({
+  name: z.string().max(16).optional(),
+  groupName: z.string().max(16).optional(),
+});
