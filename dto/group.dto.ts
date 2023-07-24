@@ -7,3 +7,8 @@ export const createGroupDtoSchema = z.object({
 });
 
 export type CreateGroupDto = z.infer<typeof createGroupDtoSchema>;
+
+export const searchGroupDtoSchema = z.object({
+  name: z.string().max(16).optional(),
+  code: z.string().max(16).optional(),
+});
