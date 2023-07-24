@@ -1,46 +1,113 @@
 <script setup lang="ts">
+import { UCommandPalette } from "#components";
+import { Group } from "@nuxthq/ui/dist/runtime/types";
+import { Category, Site, Url } from "@prisma/client";
+import { pinyin } from "pinyin-pro";
+
 const emit = defineEmits<{
   (event: "select"): void;
 }>();
-const commandPaletteRef = ref();
+const commandPaletteRef = ref<InstanceType<typeof UCommandPalette>>();
 const colorMode = useColorMode();
+const groupsData = useGroups();
+const group = useGroup();
+const { data: categories } = useNuxtData(
+  `categoryByGroupId-${group.value?.id}`
+);
 
-const groups = [
-  {
-    key: "commands",
-    label: "命令",
-    commands: [
-      {
-        id: "switch-theme",
-        label: "切换颜色模式",
-        icon: "i-heroicons-sun",
-        click: () => {
-          colorMode.value = colorMode.value === "dark" ? "light" : "dark";
-        },
+const commandsGroup = {
+  key: "commands",
+  label: "命令",
+  commands: [
+    {
+      id: "switch-theme",
+      label: "切换颜色模式",
+      icon: "i-heroicons-sun",
+      click: () => {
+        colorMode.value = colorMode.value === "dark" ? "light" : "dark";
       },
-      {
-        id: "goto-admin",
-        label: "前往后台管理",
-        icon: "i-heroicons-server",
-        to: "/_admin",
-      },
-      {
-        id: "goto-front",
-        label: "前往前台查看",
-        icon: "i-heroicons-squares-2x2-solid",
-        to: "/",
-      },
-    ],
-  },
-  {
-    key: "todo",
-    label: "代办",
-    inactive: "站点",
-    commands: [
-      { id: "linear", label: "开发中", icon: "i-simple-icons-linear" },
-    ],
-  },
-];
+    },
+    {
+      id: "goto-admin",
+      label: "前往后台管理",
+      icon: "i-heroicons-server",
+      to: "/_admin",
+    },
+    {
+      id: "goto-front",
+      label: "前往前台查看",
+      icon: "i-heroicons-squares-2x2-solid",
+      to: "/",
+    },
+  ],
+};
+
+const siteGroup = computed<Group[]>(() => {
+  return categories.value.map(
+    (v: Category & { sites: (Site & { urls: Url[] })[] }) => {
+      return {
+        key: `category-${v.id}`,
+        label: v.name,
+        commands: v.sites
+          .map((site) => {
+            const sitePinyin = pinyin(site.name, {
+              toneType: "none",
+              type: "array",
+            }).join("");
+            let icon: string, avatar: any;
+            if (site.icon?.startsWith("http")) {
+              avatar = {
+                src: site.icon,
+              };
+            } else {
+              icon = site.icon!;
+            }
+
+            return site.urls.map((url) => {
+              return {
+                site: site,
+                url: url,
+                sitePinyin: sitePinyin,
+                urlPinyin: pinyin(url.label ?? "", {
+                  toneType: "none",
+                  type: "array",
+                }).join(""),
+                id: `open-${site.id}-${url.id}`,
+                label: `${site.name} - ${url.label}`,
+                icon,
+                avatar,
+                chip: colorMode.value === "dark" ? "a1a1a1" : "eee",
+                suffix: url.link,
+                click: () => window.open(url.link, "_blank"),
+              };
+            });
+          })
+          .flat(),
+      };
+    }
+  );
+});
+const groupGroup = computed<Group>(() => {
+  return {
+    key: "groups",
+    label: "分组",
+    commands: groupsData.value.map((v) => {
+      return {
+        id: `group-${v.id}`,
+        label: v.name,
+        icon: v.icon!,
+        to: `/${v.code}`,
+      };
+    }),
+  };
+});
+
+const groups = computed(() => {
+  if (commandPaletteRef.value?.query) {
+    return [...siteGroup.value, groupGroup.value, commandsGroup];
+  }
+  return [groupGroup.value, commandsGroup];
+});
 
 function onSelect(option: any) {
   if (option.click) {
@@ -74,19 +141,65 @@ const ui = {
       },
       avatar: {
         size: "2xs",
+        base: "flex-shrink-0",
       },
     },
   },
 };
+
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
+  <DefineTemplate v-slot="{ command, active }">
+    <FetchIcon
+      :class="[
+        ui.group.command.icon.base,
+        active ? ui.group.command.icon.active : ui.group.command.icon.inactive,
+      ]"
+      v-if="command.icon"
+      :name="command.icon"
+    ></FetchIcon>
+    <UAvatar
+      v-else-if="command.avatar"
+      v-bind="{ size: ui.group.command.avatar.size, ...command.avatar }"
+      :class="ui.group.command.avatar.base"
+      aria-hidden="true"
+    />
+  </DefineTemplate>
   <UCommandPalette
     ref="commandPaletteRef"
     :groups="groups"
     :ui="ui"
+    :fuse="{
+      fuseOptions: {
+        ignoreLocation: true,
+        includeMatches: true,
+        useExtendedSearch: true,
+        threshold: 0,
+        keys: [
+          'label',
+          'suffix',
+          'site.description',
+          'sitePinyin',
+          'urlPinyin',
+        ],
+      },
+      resultLimit: 10,
+    }"
     :autoselect="false"
     placeholder="搜索应用或命令"
     @update:model-value="onSelect"
-  />
+  >
+    <template #groups-icon="{ command, active }">
+      <ReuseTemplate :command="command" :active="active" />
+    </template>
+    <template
+      v-for="item in siteGroup"
+      #[`${item.key}-icon`]="{ command, active }"
+    >
+      <ReuseTemplate :command="command" :active="active" />
+    </template>
+  </UCommandPalette>
 </template>
