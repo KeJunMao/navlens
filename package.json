@@ -6,7 +6,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "start": "node /app/.output/server/index.mjs",
+    "docker:start": "npx prisma migrate deploy && npm run start"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
