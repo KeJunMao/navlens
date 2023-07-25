@@ -32,6 +32,10 @@ const defaultUrl = {
       categories: data.categories ?  data.categories.map((v:any)=>({...v, label: v.name})) : [],
       urls: data.urls ?  data.urls : [defaultUrl]
     })"
+    :copyDataTransform="(data: any)=> ({
+      ...data,
+      urls: data.urls ?  data.urls.map(({id, ...url}: any)=> ({...url})) : [defaultUrl]
+    })"
     :saveDataTransform="({categories,urls, ...data}: any)=> ({
       ...data,
       categoryIds: categories.map((v:any)=>v.id),

@@ -17,10 +17,12 @@ const props = withDefaults(
     defaultCreateState?: Record<string, any>;
     viewDataTransform?: (data: any) => any;
     saveDataTransform?: (data: any) => any;
+    copyDataTransform?: (data: any) => any;
   }>(),
   {
     viewDataTransform: (data: any) => data,
     saveDataTransform: (data: any) => data,
+    copyDataTransform: (data: any) => data,
   }
 );
 
@@ -85,7 +87,8 @@ const acitons = (row: any) => [
       label: "复制",
       icon: "i-heroicons-document-duplicate-20-solid",
       click: () => {
-        showCreateModal(row);
+        const { id, ...data } = row;
+        showCreateModal(props.copyDataTransform(data));
       },
     },
   ],

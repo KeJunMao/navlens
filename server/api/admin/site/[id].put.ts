@@ -31,10 +31,12 @@ export default defineApi(async (event) => {
         })),
       },
       categories: {
-        set: categoryIds.map((id) => ({
-          siteId_categoryId: {
-            siteId,
-            categoryId: id,
+        deleteMany: {},
+        create: categoryIds.map((id) => ({
+          category: {
+            connect: {
+              id: id,
+            },
           },
         })),
       },
