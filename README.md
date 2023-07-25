@@ -1,63 +1,46 @@
-# Nuxt 3 Minimal Starter
+<p align="center">
+  <br>
+  <img width="100" src="./public/android-chrome-192x192.png" alt="AI Anything logo">
+  <br>
+</p>
+<h2 align='center'>NavLens</h2>
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+<p align='center'>
+  一个现代 <em>开源</em> <strong>美观</strong> 的私有导航应用
+<br>
+<p align="center">
+  <a style="text-decoration:none" href="https://github.com/KeJunMao" target="_blank">
+    <img src="https://img.shields.io/badge/Author-KeJun-00db80" alt="Author" />
+  </a>
+</p>
 
-## Setup
+## 简介
 
-Make sure to install the dependencies:
+一个开源导航网站，速度非常快
 
-```bash
-# npm
-npm install
+## 特性
 
-# pnpm
-pnpm install
+- 😃 [100,000+](https://icones.js.org/) 图标可供使用
+- ⚡️ Nuxt3 驱动，就是快！
+- 🔥 PWA 当然
 
-# yarn
-yarn install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
+## 部署
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
+git clone https://github.com/KeJunMao/navlens.git
+docker compose build
+docker compose up
 ```
 
-Locally preview production build:
+## 💻 发展
 
-```bash
-# npm
-npm run preview
+- 克隆此代码库
+- 使用 `corepack enable` 启用 Corepack (对于 Node.js < 16.10，请使用`npm i -g corepack`)
+- 使用 `pnpm install` 安装依赖项
+- 使用 `pnpm dev` 运行交互测试
 
-# pnpm
-pnpm run preview
+## 协议
 
-# yarn
-yarn preview
-```
+用 💛 发电
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+根据[MIT 许可证](./LICENSE)发布
