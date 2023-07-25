@@ -13,6 +13,7 @@ const groupsData = useGroups();
 const group = useGroup();
 const categories = computed(() => group.value?.categories);
 const route = useRoute();
+const isInAdmin = computed(() => route.path.startsWith("/_admin"));
 
 const commandsGroup = computed(() => {
   return {
@@ -27,7 +28,7 @@ const commandsGroup = computed(() => {
           colorMode.value = colorMode.value === "dark" ? "light" : "dark";
         },
       },
-      !route.path.startsWith("/_admin")
+      !isInAdmin.value
         ? {
             id: "goto-admin",
             label: "前往后台管理",
@@ -121,10 +122,40 @@ const categoryGroup = computed<Group>(() => {
   };
 });
 
+const adminGroup = {
+  key: "admin",
+  label: "管理",
+  commands: [
+    {
+      id: "group",
+      label: "分组",
+      icon: "i-heroicons-rectangle-group",
+      to: "/_admin/group",
+    },
+    {
+      id: "category",
+      label: "分类",
+      icon: "i-heroicons-queue-list",
+      to: "/_admin/category",
+    },
+    {
+      id: "site",
+      label: "站点",
+      icon: "i-heroicons-paper-airplane",
+      to: "/_admin/site",
+    },
+  ],
+};
+
 const groups = computed(() => {
-  const group = [categoryGroup.value, groupGroup.value, commandsGroup.value];
-  if (commandPaletteRef.value?.query) {
-    return [...siteGroup.value, ...group];
+  const group: any[] = [commandsGroup.value];
+  if (isInAdmin.value) {
+    group.unshift(adminGroup);
+  } else {
+    group.unshift(categoryGroup.value, groupGroup.value);
+    if (commandPaletteRef.value?.query) {
+      return [...siteGroup.value, ...group];
+    }
   }
   return group;
 });
