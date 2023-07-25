@@ -4,7 +4,7 @@
       <AdminPageHeader />
     </template>
     <template #aside>
-      <AdminPageNavigation />
+      <AdminPageAside />
     </template>
     <slot />
   </NavsPageLayout>
