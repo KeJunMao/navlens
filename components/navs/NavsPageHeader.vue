@@ -20,7 +20,15 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
       <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div class="h-16 flex items-center justify-between gap-3">
           <div class="lg:flex-1">
-            <slot name="left"></slot>
+            <slot name="left">
+              <NuxtLink
+                to="/"
+                class="flex items-end gap-1.5 font-bold text-xl text-gray-900 dark:text-white"
+              >
+                <Logo class="w-8 h-8 text-primary-500 dark:text-primary-400" />
+                <span class="hidden sm:block">NavLens</span>
+              </NuxtLink>
+            </slot>
           </div>
           <slot name="center">
             <NavsPageSearch />

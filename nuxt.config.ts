@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   ui: {
     global: true,
     icons: ["heroicons"],
+    safelistColors: ["primary", "red"],
   },
   imports: {
     dirs: ["dto"],
@@ -14,7 +15,7 @@ export default defineNuxtConfig({
       dirs: ["dto"],
     },
     experimental: {
-      openAPI: true
-    }
+      openAPI: true,
+    },
   },
 });
