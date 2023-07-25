@@ -11,7 +11,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
   <DefineTemplate>
     <div
       :id="`site-${site.id}`"
-      class="group w-full flex flex-col space-y-2 ring-1 ring-gray-200 dark:ring-gray-600 rounded-md transition-all hover:-translate-y-1 px-4 py-2 backdrop-blur bg-white/30 dark:bg-gray-800/30 relative"
+      class="group w-full h-full flex flex-col space-y-2 ring-1 ring-gray-200 dark:ring-gray-600 rounded-md transition-all hover:-translate-y-1 px-4 py-2 backdrop-blur bg-white/30 dark:bg-gray-800/30 relative"
     >
       <div class="flex space-x-2 items-center">
         <NavsIconOrImage :icon="site.icon" :name="site.name" />
@@ -22,6 +22,12 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
         v-if="site.description"
       >
         {{ site.description }}
+      </div>
+      <div
+        class="text-sm text-gray-500 dark:text-gray-400"
+        v-else-if="onlyOne"
+      >
+        {{ firstUrl.link }}
       </div>
       <template v-if="!onlyOne">
         <div class="flex space-x-1">
@@ -39,9 +45,9 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
     </div>
   </DefineTemplate>
   <template v-if="onlyOne">
-    <NuxtLink :to="onlyOne ? firstUrl?.link : false" target="_blank">
+    <NuxtLink :to="onlyOne ? firstUrl?.link : false" target="_blank" class="h-full">
       <UTooltip
-        class="w-full"
+        class="w-full h-full"
         :text="`${firstUrl.label ? firstUrl.label + ':' : ''}${firstUrl.link}`"
       >
         <ReuseTemplate />
