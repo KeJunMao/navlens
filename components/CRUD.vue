@@ -213,17 +213,17 @@ defineExpose({
 </script>
 
 <template>
-  <UCard>
+  <UCard class="max-w-[calc(100vw-32px)]">
     <template #header>
       <UiForm
         ref="searchForm"
         :state="searchState"
         :schema="searchSchema"
         @submit.prevent.stop="searchSubmit"
-        class="flex space-x-2 items-end"
+        class="grid gap-2 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
         <slot name="search" :state="searchState"></slot>
-        <UFormGroup>
+        <div class="flex items-end">
           <div class="flex space-x-2">
             <UButton
               type="submit"
@@ -233,18 +233,23 @@ defineExpose({
               搜索
             </UButton>
             <UButton
-              color="primary"
+              color="gray"
               icon="i-heroicons-plus-20-solid"
               @click="showCreateModal"
             >
               新增
             </UButton>
           </div>
-        </UFormGroup>
+        </div>
       </UiForm>
     </template>
 
-    <UTable :columns="tableColumns" :rows="tableRows" :loading="searchLoading">
+    <UTable
+      :columns="tableColumns"
+      :rows="tableRows"
+      :loading="searchLoading"
+      class="overflow-auto"
+    >
       <template #icon-data="{ row }">
         <FetchIcon v-if="row?.icon" :name="row.icon" class="text-xl" />
         <template v-else>无</template>
