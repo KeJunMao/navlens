@@ -15,7 +15,9 @@ const links = computed(() =>
     :links="links"
     :ui="{
       size: 'text-md',
+
     }"
+    class="mb-4 lg:mb-8"
   >
     <template #icon="{ link }">
       <div class="z-[1]">

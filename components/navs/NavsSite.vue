@@ -10,6 +10,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 <template>
   <DefineTemplate>
     <div
+      :id="`site-${site.id}`"
       class="group w-full flex flex-col space-y-2 ring-1 ring-gray-200 dark:ring-gray-600 rounded-md transition-all hover:-translate-y-1 px-4 py-2 backdrop-blur bg-white/30 dark:bg-gray-800/30 relative"
     >
       <div class="flex space-x-2 items-center">

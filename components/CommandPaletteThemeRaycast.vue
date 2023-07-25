@@ -11,6 +11,7 @@ const commandPaletteRef = ref<InstanceType<typeof UCommandPalette>>();
 const colorMode = useColorMode();
 const groupsData = useGroups();
 const group = useGroup();
+const categories = computed(() => group.value?.categories);
 
 const commandsGroup = {
   key: "commands",
@@ -40,49 +41,51 @@ const commandsGroup = {
 };
 
 const siteGroup = computed<Group[]>(() => {
-  return group.value?.categories?.map(
-    (v: Category & { sites: (Site & { urls: Url[] })[] }) => {
-      return {
-        key: `category-${v.id}`,
-        label: v.name,
-        commands: v.sites
-          .map((site) => {
-            const sitePinyin = pinyin(site.name, {
-              toneType: "none",
-              type: "array",
-            }).join("");
-            let icon: string, avatar: any;
-            if (site.icon?.startsWith("http")) {
-              avatar = {
-                src: site.icon,
-              };
-            } else {
-              icon = site.icon!;
-            }
+  return (
+    group.value?.categories?.map(
+      (v: Category & { sites: (Site & { urls: Url[] })[] }) => {
+        return {
+          key: `category-${v.id}`,
+          label: v.name,
+          commands: v.sites
+            .map((site) => {
+              const sitePinyin = pinyin(site.name, {
+                toneType: "none",
+                type: "array",
+              }).join("");
+              let icon: string, avatar: any;
+              if (site.icon?.startsWith("http")) {
+                avatar = {
+                  src: site.icon,
+                };
+              } else {
+                icon = site.icon!;
+              }
 
-            return site.urls.map((url) => {
-              return {
-                site: site,
-                url: url,
-                sitePinyin: sitePinyin,
-                urlPinyin: pinyin(url.label ?? "", {
-                  toneType: "none",
-                  type: "array",
-                }).join(""),
-                id: `open-${site.id}-${url.id}`,
-                label: `${site.name} - ${url.label}`,
-                icon,
-                avatar,
-                chip: colorMode.value === "dark" ? "a1a1a1" : "eee",
-                suffix: url.link,
-                click: () => window.open(url.link, "_blank"),
-              };
-            });
-          })
-          .flat(),
-      };
-    }
-  ) ?? []
+              return site.urls.map((url) => {
+                return {
+                  site: site,
+                  url: url,
+                  sitePinyin: sitePinyin,
+                  urlPinyin: pinyin(url.label ?? "", {
+                    toneType: "none",
+                    type: "array",
+                  }).join(""),
+                  id: `open-${site.id}-${url.id}`,
+                  label: `${site.name} - ${url.label}`,
+                  icon,
+                  avatar,
+                  chip: colorMode.value === "dark" ? "a1a1a1" : "eee",
+                  suffix: url.link,
+                  click: () => window.open(url.link, "_blank"),
+                };
+              });
+            })
+            .flat(),
+        };
+      }
+    ) ?? []
+  );
 });
 const groupGroup = computed<Group>(() => {
   return {
@@ -98,12 +101,28 @@ const groupGroup = computed<Group>(() => {
     }),
   };
 });
+const categoryGroup = computed<Group>(() => {
+  return {
+    key: "categories",
+    label: "分类",
+    commands:
+      categories.value?.map((category) => {
+        return {
+          id: `category-${category.id}`,
+          label: category.name,
+          icon: category.icon!,
+          to: `#category-${category.id}`,
+        };
+      }) ?? [],
+  };
+});
 
 const groups = computed(() => {
+  const group = [categoryGroup.value, groupGroup.value, commandsGroup];
   if (commandPaletteRef.value?.query) {
-    return [...siteGroup.value, groupGroup.value, commandsGroup];
+    return [...siteGroup.value, ...group];
   }
-  return [groupGroup.value, commandsGroup];
+  return group;
 });
 
 function onSelect(option: any) {
@@ -190,6 +209,9 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
     @update:model-value="onSelect"
   >
     <template #groups-icon="{ command, active }">
+      <ReuseTemplate :command="command" :active="active" />
+    </template>
+    <template #categories-icon="{ command, active }">
       <ReuseTemplate :command="command" :active="active" />
     </template>
     <template

@@ -6,9 +6,7 @@ export default defineComponent({
     name: {
       type: String,
     },
-    class: {
-      type: String,
-    },
+    class: {},
   },
   computed: {
     iconName() {

@@ -6,7 +6,7 @@ defineProps<{
 
 <template>
   <div class="flex flex-col space-y-4">
-    <h2 class="mb-2 text-xl flex items-center space-x-2">
+    <h2 class="mb-2 text-xl flex items-center space-x-2" :id="`category-${category.id}`">
       <FetchIcon
         class="text-gray-500 dark:text-gray-400"
         v-if="category.icon"
