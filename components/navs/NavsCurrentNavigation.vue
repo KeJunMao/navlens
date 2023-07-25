@@ -14,22 +14,6 @@ const accordionItems = computed(() => {
   }) ?? []) as AccordionItem[];
 });
 const appConfig = useAppConfig();
-
-const route = useRoute();
-const router = useRouter();
-const { updateHeadings } = useScrollspy();
-
-watch(
-  () => route.path,
-  () => {
-    setTimeout(() => {
-      if (process.client) {
-        updateHeadings([...document.querySelectorAll('[id^="site-"]')]);
-      }
-    }, 300);
-  },
-  { immediate: true }
-);
 </script>
 <template>
   <div class="space-y-2">
