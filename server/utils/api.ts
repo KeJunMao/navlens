@@ -3,7 +3,6 @@ import { ZodError } from "zod";
 
 function zodErrorToString(err: ZodError) {
   const errors = err.formErrors;
-  console.log(errors)
   const fieldErrors = Object.keys(errors.fieldErrors).map(
     (key) => `${key}: ${errors.fieldErrors[key]?.join(", ")}`
   );

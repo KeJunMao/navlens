@@ -19,7 +19,6 @@ export default defineApi(async (event) => {
       },
     },
   });
-  console.log(sites);
   await prisma.categoriesOnSites.deleteMany({
     where: {
       category: {
