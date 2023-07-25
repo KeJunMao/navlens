@@ -12,33 +12,37 @@ const colorMode = useColorMode();
 const groupsData = useGroups();
 const group = useGroup();
 const categories = computed(() => group.value?.categories);
+const route = useRoute();
 
-const commandsGroup = {
-  key: "commands",
-  label: "命令",
-  commands: [
-    {
-      id: "switch-theme",
-      label: "切换颜色模式",
-      icon: "i-heroicons-sun",
-      click: () => {
-        colorMode.value = colorMode.value === "dark" ? "light" : "dark";
+const commandsGroup = computed(() => {
+  return {
+    key: "commands",
+    label: "命令",
+    commands: [
+      {
+        id: "switch-theme",
+        label: "切换颜色模式",
+        icon: "i-heroicons-sun",
+        click: () => {
+          colorMode.value = colorMode.value === "dark" ? "light" : "dark";
+        },
       },
-    },
-    {
-      id: "goto-admin",
-      label: "前往后台管理",
-      icon: "i-heroicons-server",
-      to: "/_admin",
-    },
-    {
-      id: "goto-front",
-      label: "前往前台查看",
-      icon: "i-heroicons-squares-2x2-solid",
-      to: "/",
-    },
-  ],
-};
+      !route.path.startsWith("/_admin")
+        ? {
+            id: "goto-admin",
+            label: "前往后台管理",
+            icon: "i-heroicons-server",
+            to: "/_admin",
+          }
+        : {
+            id: "goto-front",
+            label: "前往前台查看",
+            icon: "i-heroicons-squares-2x2-solid",
+            to: "/",
+          },
+    ],
+  };
+});
 
 const siteGroup = computed<Group[]>(() => {
   return (
@@ -118,7 +122,7 @@ const categoryGroup = computed<Group>(() => {
 });
 
 const groups = computed(() => {
-  const group = [categoryGroup.value, groupGroup.value, commandsGroup];
+  const group = [categoryGroup.value, groupGroup.value, commandsGroup.value];
   if (commandPaletteRef.value?.query) {
     return [...siteGroup.value, ...group];
   }
