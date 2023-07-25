@@ -6,6 +6,10 @@ import {
 } from "@/dto/category.dto";
 const crud = ref<InstanceType<typeof CRUD>>();
 
+useSeoMeta({
+  title: "分类管理",
+});
+
 const search = async (q: string) => {
   const groups = await $fetch("/api/admin/group", {
     query: { name: q },

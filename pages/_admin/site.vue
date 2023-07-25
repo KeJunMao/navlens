@@ -2,6 +2,11 @@
 import { hash } from "ohash";
 import { CRUD } from "#components";
 import { searchSiteDtoSchema, createSiteDtoSchema } from "@/dto/site.dto";
+
+useSeoMeta({
+  title: "站点管理",
+});
+
 const crud = ref<InstanceType<typeof CRUD>>();
 
 const search = async (q: string) => {

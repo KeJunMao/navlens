@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { CRUD } from "#components";
 import { searchGroupDtoSchema, createGroupDtoSchema } from "@/dto/group.dto";
+useSeoMeta({
+  title: "分组管理",
+});
+
 const crud = ref<InstanceType<typeof CRUD>>();
 </script>
 
