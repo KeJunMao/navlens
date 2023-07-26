@@ -7,16 +7,6 @@ const categories = computed(() => group.value?.categories);
 useSeoMeta({
   title: group.value?.name,
 });
-const { updateHeadings } = useScrollspy();
-
-watchEffect(() => {
-  if (process.client && group.value) {
-    nextTick(() => {
-      updateHeadings([...document.querySelectorAll('[id^="site-"]')]);
-      updateHeadings([...document.querySelectorAll('[id^="categories-"]')]);
-    });
-  }
-});
 </script>
 
 <template>
