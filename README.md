@@ -26,10 +26,23 @@
 
 ## 部署
 
+### 使用 Docker Compose
+
 ```bash
 git clone https://github.com/KeJunMao/navlens.git
 docker compose build
 docker compose up
+```
+
+### 传统部署
+
+```bash
+git clone https://github.com/KeJunMao/navlens.git
+pnpm install
+# 配置 .env 的 NUXT_DATABASE_URL
+pnpx prisma migrate deploy
+pnpm build
+pnpm start # node /app/.output/server/index.mjs
 ```
 
 ## 💻 发展
