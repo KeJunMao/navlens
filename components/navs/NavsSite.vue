@@ -5,6 +5,7 @@ const props = defineProps<{
 const firstUrl = computed(() => props.site.urls[0]);
 const onlyOne = computed(() => props.site.urls.length === 1);
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
+const { view } = uselastVisitedLinks();
 </script>
 
 <template>
@@ -29,6 +30,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
         <div class="flex space-x-1">
           <UTooltip v-for="item in site.urls" :text="item.link" :key="item.id">
             <UButton
+              @click="view(item)"
               :to="item.link"
               target="_blank"
               size="sm"
@@ -42,6 +44,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
   </DefineTemplate>
   <template v-if="onlyOne">
     <NuxtLink
+      @click="view(firstUrl)"
       :id="`site-${site.id}`"
       :to="onlyOne ? firstUrl?.link : false"
       target="_blank"
@@ -64,6 +67,6 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 
 <style lang="postcss">
 .pulse-highlight {
-  @apply animate-pulse animate-twice animate-duration-300
+  @apply animate-pulse animate-twice animate-duration-300;
 }
 </style>

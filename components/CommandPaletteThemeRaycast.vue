@@ -14,7 +14,7 @@ const group = useGroup();
 const categories = computed(() => group.value?.categories);
 const route = useRoute();
 const isInAdmin = computed(() => route.path.startsWith("/_admin"));
-
+const { links, view } = uselastVisitedLinks();
 const commandsGroup = computed(() => {
   return {
     key: "commands",
@@ -45,6 +45,34 @@ const commandsGroup = computed(() => {
   };
 });
 
+const lastLinksGroup = computed(() => {
+  return {
+    key: "lastLinks",
+    label: "最近访问",
+    commands: links.value.map((site) => {
+      if (!site) return;
+      let icon: string = "",
+        avatar: any;
+      if (site.icon?.startsWith("http")) {
+        avatar = {
+          src: site.icon,
+        };
+      } else {
+        icon = site.icon!;
+      }
+      const { url } = site;
+      return {
+        id: `last-${site.id}-${site.url?.id}`,
+        label: `${site.name}${url?.label ? ` - ${url.label}` : ""}`,
+        icon,
+        avatar,
+        chip: colorMode.value === "dark" ? "a1a1a1" : "eee",
+        suffix: url?.link,
+        href: url?.link,
+      };
+    }),
+  };
+});
 const siteGroup = computed<Group[]>(() => {
   return (
     group.value?.categories?.map(
@@ -69,20 +97,19 @@ const siteGroup = computed<Group[]>(() => {
 
               return site.urls.map((url) => {
                 return {
-                  site: site,
-                  url: url,
+                  description: site.description,
                   sitePinyin: sitePinyin,
                   urlPinyin: pinyin(url.label ?? "", {
                     toneType: "none",
                     type: "array",
                   }).join(""),
                   id: `open-${site.id}-${url.id}`,
-                  label: `${site.name} - ${url.label}`,
+                  label: `${site.name}${url.label ? ` - ${url.label}` : ""}`,
                   icon,
                   avatar,
                   chip: colorMode.value === "dark" ? "a1a1a1" : "eee",
                   suffix: url.link,
-                  click: () => window.open(url.link, "_blank"),
+                  click: () => (view(url), window.open(url.link, "_blank")),
                 };
               });
             })
@@ -152,7 +179,7 @@ const groups = computed(() => {
   if (isInAdmin.value) {
     group.unshift(adminGroup);
   } else {
-    group.unshift(categoryGroup.value, groupGroup.value);
+    group.unshift(lastLinksGroup.value, categoryGroup.value, groupGroup.value);
     if (commandPaletteRef.value?.query) {
       return [...siteGroup.value, ...group];
     }
@@ -229,13 +256,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
         includeMatches: true,
         useExtendedSearch: true,
         threshold: 0,
-        keys: [
-          'label',
-          'suffix',
-          'site.description',
-          'sitePinyin',
-          'urlPinyin',
-        ],
+        keys: ['label', 'suffix', 'description', 'sitePinyin', 'urlPinyin'],
       },
       resultLimit: 10,
     }"
