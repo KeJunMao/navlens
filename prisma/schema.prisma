@@ -48,6 +48,14 @@ model Url {
   siteId Int
 }
 
+model User {
+  id       String  @id @default(cuid())
+  name     String?
+  email    String? @unique
+  image    String?
+  password String?
+}
+
 model CategoriesOnSites {
   site       Site     @relation(fields: [siteId], references: [id])
   siteId     Int

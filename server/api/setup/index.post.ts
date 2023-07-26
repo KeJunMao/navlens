@@ -1,5 +1,5 @@
 import { setupAppDtoSchema } from "../../../dto/setup.dto";
-
+import { hash } from "ohash";
 export default defineApi(async (event) => {
   const prisma = usePrisma();
   const existingRecord = await prisma.group.findUnique({
@@ -15,7 +15,18 @@ export default defineApi(async (event) => {
     throw error;
   }
   const body = await readBody(event);
-  const bodyData = setupAppDtoSchema.parse(body);
+  const { username, password, repassword, ...bodyData } =
+    setupAppDtoSchema.parse(body);
+  const userCount = await prisma.user.count();
+  if (userCount !== 0) {
+    throw error;
+  }
+  await prisma.user.create({
+    data: {
+      name: username,
+      password: hash(password),
+    },
+  });
   try {
     return await prisma.group.create({
       data: {
@@ -43,7 +54,7 @@ export default defineApi(async (event) => {
       },
     });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     throw error;
   }
 });
