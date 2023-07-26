@@ -31,7 +31,6 @@ export const authOptions: AuthConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log(hash(credentials.password));
         const prisma = usePrisma();
         const user = await prisma.user.findUnique({
           where: {
