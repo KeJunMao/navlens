@@ -16,7 +16,8 @@
     "@vite-pwa/nuxt": "^0.1.0",
     "nuxt": "^3.6.3",
     "nuxt-icon": "^0.4.2",
-    "prisma": "^5.0.0"
+    "prisma": "^5.0.0",
+    "tailwindcss-animated": "^1.0.1"
   },
   "dependencies": {
     "@nuxthq/ui": "^2.6.0",

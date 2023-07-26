@@ -10,8 +10,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 <template>
   <DefineTemplate>
     <div
-      :id="`site-${site.id}`"
-      class="group w-full h-full flex flex-col space-y-2 transition-all px-4 py-2 relative border border-gray-200/75 hover:border-gray-400 dark:border-gray-700 hover:dark:border-gray-600 hover:dark:bg-white/5 hover:bg-gray-300/5 rounded-lg"
+      class="animate-twice animate-duration-300 group w-full h-full flex flex-col space-y-2 transition-all px-4 py-2 relative border border-gray-200/75 hover:border-gray-400 dark:border-gray-700 hover:dark:border-gray-600 hover:dark:bg-white/5 hover:bg-gray-300/5 rounded-lg"
     >
       <div class="flex space-x-2 items-center">
         <NavsIconOrImage :icon="site.icon" :name="site.name" />
@@ -43,6 +42,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
   </DefineTemplate>
   <template v-if="onlyOne">
     <NuxtLink
+      :id="`site-${site.id}`"
       :to="onlyOne ? firstUrl?.link : false"
       target="_blank"
       class="h-full"
@@ -56,6 +56,14 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
     </NuxtLink>
   </template>
   <template v-else>
-    <ReuseTemplate />
+    <div :id="`site-${site.id}`">
+      <ReuseTemplate />
+    </div>
   </template>
 </template>
+
+<style lang="postcss">
+.pulse-highlight {
+  @apply animate-pulse animate-twice animate-duration-300
+}
+</style>
