@@ -49,8 +49,8 @@ async function setupSubmit() {
 <template>
   <div class="leading-loose min-w-[20rem] lg:min-w-[24rem] xl:min-w-[26rem]">
     <h1 class="text-3xl flex items-center justify-between mb-4">
-      <div class="flex">
-        <Logo class="w-8 h-8 text-primary-500 dark:text-primary-400 mr-1" />欢迎
+      <div class="flex items-center">
+        <Logo class="w-8 h-8 text-primary-500 dark:text-primary-400 mr-2" />欢迎
       </div>
       <AppColorModeButton />
     </h1>

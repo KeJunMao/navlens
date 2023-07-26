@@ -3,6 +3,25 @@ import { Dialog, DialogPanel, TransitionRoot } from "@headlessui/vue";
 const route = useRoute();
 
 const isDialogOpen = ref(false);
+const { user, status, signOut } = useAuth();
+const userDropdownItems = [
+  [
+    {
+      label: "个人资料",
+      icon: "i-heroicons-user",
+      to: "/_admin/profile",
+    },
+  ],
+  [
+    {
+      label: "退出登录",
+      icon: "i-heroicons-arrow-left-on-rectangle",
+      click: () => {
+        signOut();
+      },
+    },
+  ],
+];
 
 watch(
   () => route.fullPath,
@@ -33,7 +52,9 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
           <slot name="center">
             <NavsPageSearch />
           </slot>
-          <div class="flex items-center justify-end lg:flex-1 gap-1.5">
+          <div
+            class="flex items-center justify-end lg:flex-1 gap-1.5 space-x-2"
+          >
             <slot name="right" />
             <AppColorModeButton />
             <UButton
@@ -43,6 +64,17 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
               :icon="isDialogOpen ? 'i-heroicons-x-mark' : 'i-heroicons-bars-3'"
               @click="isDialogOpen = !isDialogOpen"
             />
+            <UDropdown
+              v-if="status === 'authenticated'"
+              :items="userDropdownItems"
+              :popper="{ placement: 'bottom-start' }"
+            >
+              <UAvatar
+                :alt="user?.username || user?.name || user?.email || 'Admin'"
+                :src="user?.image!"
+                size="sm"
+              />
+            </UDropdown>
           </div>
         </div>
       </div>

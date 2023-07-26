@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-definePageMeta({ layout: "admin" });
+definePageMeta({
+  layout: "admin",
+  middleware: "auth",
+  auth: { guestRedirectTo: "/_login" },
+});
 </script>
 
 <template>

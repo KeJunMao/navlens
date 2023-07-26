@@ -23,7 +23,7 @@ export default defineApi(async (event) => {
   }
   await prisma.user.create({
     data: {
-      name: username,
+      username,
       password: hash(password),
     },
   });

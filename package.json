@@ -20,6 +20,8 @@
     "tailwindcss-animated": "^1.0.1"
   },
   "dependencies": {
+    "@auth/core": "^0.10.0",
+    "@hebilicious/authjs-nuxt": "0.2.0-beta.3",
     "@nuxthq/ui": "^2.6.0",
     "@prisma/client": "5.0.0",
     "@vueuse/core": "^10.2.1",

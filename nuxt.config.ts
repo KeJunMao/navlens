@@ -1,7 +1,33 @@
+import { resolve } from "node:path";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: true,
-  modules: ["@nuxthq/ui", "nuxt-icon", "@vueuse/nuxt", "@vite-pwa/nuxt"],
+  alias: {
+    cookie: resolve(__dirname, "node_modules/cookie"),
+    jose: resolve(__dirname, "node_modules/jose/dist/browser/index.js"),
+    "@panva/hkdf": resolve(
+      __dirname,
+      "node_modules/@panva/hkdf/dist/web/index.js"
+    ),
+  },
+  runtimeConfig: {
+    authJs: {
+      secret: "",
+    },
+    public: {
+      authJs: {
+        verifyClientOnEveryRequest: true,
+      },
+    },
+  },
+  modules: [
+    "@nuxthq/ui",
+    "nuxt-icon",
+    "@vueuse/nuxt",
+    "@vite-pwa/nuxt",
+    "@hebilicious/authjs-nuxt",
+  ],
   ui: {
     global: true,
     icons: ["heroicons"],
