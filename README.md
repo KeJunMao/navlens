@@ -6,7 +6,7 @@
 <h2 align='center'>NavLens</h2>
 
 <p align='center'>
-  一个现代 <em>开源</em> <strong>美观</strong> 的私有导航应用
+  一个现代 <em>开源</em> 简洁 <strong>美观</strong> 的私有导航应用
 <br>
 <p align="center">
   <a style="text-decoration:none" href="https://github.com/KeJunMao" target="_blank">
@@ -20,6 +20,8 @@
 
 ## 特性
 
+- 🌏 分组、分类、站点、链接
+- 🔍 拼音、fuse 模糊查询
 - 😃 [100,000+](https://icones.js.org/) 图标可供使用
 - ⚡️ Nuxt3 驱动，就是快！
 - 🔥 PWA 当然
@@ -40,6 +42,7 @@ docker compose up
 git clone https://github.com/KeJunMao/navlens.git
 pnpm install
 # 配置 .env 的 NUXT_DATABASE_URL
+pnpx prisma generate
 pnpx prisma migrate deploy
 pnpm build
 pnpm start # node /app/.output/server/index.mjs
