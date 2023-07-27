@@ -11,20 +11,22 @@ const { view } = uselastVisitedLinks();
 <template>
   <DefineTemplate>
     <div
-      class="animate-twice animate-duration-300 group w-full h-full flex flex-col space-y-2 transition-all px-4 py-2 relative border border-gray-200/75 hover:border-gray-400 dark:border-gray-700 hover:dark:border-gray-600 hover:dark:bg-white/5 hover:bg-gray-300/5 rounded-lg"
+      class="animate-twice animate-duration-300 group w-full h-full flex justify-between flex-col space-y-2 transition-all px-4 py-2 relative border border-gray-200/75 hover:border-gray-400 dark:border-gray-700 hover:dark:border-gray-600 hover:dark:bg-white/5 hover:bg-gray-300/5 rounded-lg"
     >
       <div class="flex space-x-2 items-center">
         <NavsIconOrImage :icon="site.icon" :name="site.name" />
         <p>{{ site.name }}</p>
       </div>
       <div
-        class="text-sm text-gray-500 dark:text-gray-400"
-        v-if="site.description"
+        class="text-sm text-gray-500 dark:text-gray-400 truncate"
+
       >
+      <template v-if="site.description">
         {{ site.description }}
-      </div>
-      <div class="text-sm text-gray-500 dark:text-gray-400" v-else-if="onlyOne">
+      </template>
+      <template v-else>
         {{ firstUrl.link }}
+      </template>
       </div>
       <template v-if="!onlyOne">
         <div class="flex space-x-1">
