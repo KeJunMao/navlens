@@ -1,5 +1,5 @@
 # Setup node
-FROM node:alpine as base
+FROM node:16-alpine as base
 WORKDIR /app
 
 # Setup packageManager
