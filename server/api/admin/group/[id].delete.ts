@@ -11,7 +11,7 @@ export default defineApi(async (event) => {
   const sites = await prisma.site.findMany({
     where: {
       categories: {
-        some: {
+        every: {
           categoryId: {
             in: categories.map((category) => category.id),
           },

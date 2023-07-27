@@ -6,12 +6,13 @@ export default defineApi(async (event) => {
   const sites = await prisma.site.findMany({
     where: {
       categories: {
-        some: {
+        every: {
           categoryId,
-        },
+        }
       },
     },
   });
+  console.log(sites)
   await prisma.categoriesOnSites.deleteMany({
     where: {
       categoryId,
