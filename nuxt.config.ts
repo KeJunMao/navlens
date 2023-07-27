@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 export default defineNuxtConfig({
   devtools: true,
   typescript: {
-    shim: false
+    shim: false,
   },
   alias: {
     cookie: resolve(__dirname, "node_modules/cookie"),
@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     },
     public: {
       authJs: {
+        baseUrl: "http://localhost:3000",
         verifyClientOnEveryRequest: true,
       },
     },
@@ -47,9 +48,6 @@ export default defineNuxtConfig({
       options: {
         target: "esnext",
       },
-    },
-    prerender: {
-      routes: ["/_setup"],
     },
   },
   pwa: {

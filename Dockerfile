@@ -21,7 +21,7 @@ RUN npx prisma generate && pnpm build
 FROM base as runner
 ENV NUXT_DATABASE_URL="file:/app/data/navlens.db"
 ENV NUXT_AUTH_JS_SECRET="auth_js_secret"
-ENV NUXT_PUBLIC_AUTH_JS_BASE_URL="/"
+ENV NUXT_PUBLIC_AUTH_JS_BASE_URL="http://localhost:3000"
 COPY --from=builder /app/.output /app/.output
 COPY --from=builder /app/package.json /app/package.json
 COPY --from=builder /app/prisma /app/prisma
