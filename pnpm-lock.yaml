@@ -1,16 +1,12 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@auth/core':
     specifier: ^0.10.0
     version: 0.10.0
   '@hebilicious/authjs-nuxt':
-    specifier: 0.2.0-beta.3
-    version: 0.2.0-beta.3(@auth/core@0.10.0)(nuxt@3.6.5)(rollup@2.79.1)
+    specifier: 0.2.0-beta.4
+    version: 0.2.0-beta.4(@auth/core@0.10.0)(nuxt@3.6.5)(rollup@2.79.1)
   '@nuxthq/ui':
     specifier: ^2.6.0
     version: 2.6.0(rollup@2.79.1)(vue@3.3.4)(webpack@5.88.2)
@@ -1721,8 +1717,8 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /@hebilicious/authjs-nuxt@0.2.0-beta.3(@auth/core@0.10.0)(nuxt@3.6.5)(rollup@2.79.1):
-    resolution: {integrity: sha512-uo51rt3UtmDevOOC53cmtlqA7YoqVRpReR6LLLs1uLgpY/LmPiGz0CHArhpyjJ8saLdiEgbdTILlzWL3k6T2Yg==}
+  /@hebilicious/authjs-nuxt@0.2.0-beta.4(@auth/core@0.10.0)(nuxt@3.6.5)(rollup@2.79.1):
+    resolution: {integrity: sha512-cgdhxBXEDShJaPcZVXpg50B4U9g9AxIGzRcwzEK/FgLfRsy1JcURdvNDF+KNVgAEL3XyJYS573QVpXqyRJVeig==}
     requiresBuild: true
     peerDependencies:
       '@auth/core': ^0.9.0
@@ -9441,3 +9437,7 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

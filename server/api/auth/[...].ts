@@ -9,19 +9,15 @@ const runtimeConfig = useRuntimeConfig();
 export const authOptions: AuthConfig = {
   secret: runtimeConfig.authJs.secret,
   callbacks: {
-    jwt: async ({ token, user }) => {
-      const isSignIn = user ? true : false;
-      if (isSignIn) {
-        token.jwt = user ? (user as any).access_token || "" : "";
-        token.id = user ? user.id || "" : "";
-        token.username = user ? (user as any).username || "" : "";
-      }
-      return Promise.resolve(token);
+    jwt({ token, user }) {
+      if (user) token.username = user.username;
+      return token;
     },
-    session: async ({ session, token }) => {
-      (session as any).username = token.username;
-      (session as any).uid = token.id;
-      return Promise.resolve(session);
+    session({ session, token }) {
+      if (session.user) {
+        session.user.username = token.username;
+      }
+      return session;
     },
   },
   providers: [

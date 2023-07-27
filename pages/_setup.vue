@@ -89,7 +89,7 @@ async function setupSubmit() {
             block
             @click="
               async () => {
-                await form?.validate();
+                await form?.validate()
                 step++;
               }
             "

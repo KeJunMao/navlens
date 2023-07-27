@@ -4,7 +4,7 @@ const { signIn } = useAuth();
 
 definePageMeta({
   layout: "setup",
-  middleware: "app-guest-only",
+  middleware: "guest-only",
   auth: { authenticatedRedirectTo: "/_admin" },
 });
 
@@ -17,8 +17,7 @@ const state = ref({
   password: "",
 });
 
-async function setupSubmit() {
-
+async function loginSubmit() {
   try {
     loading.value = true;
     await signIn("credentials", state.value);
@@ -45,7 +44,7 @@ async function setupSubmit() {
       ref="form"
       :state="state"
       class="space-y-4 max-w-lg mt-4"
-      @submit.prevent.stop="setupSubmit"
+      @submit.prevent.stop="loginSubmit"
     >
       <UiFormGroup name="username" path="username" label="用户名">
         <UInput v-model="state.username" placeholder="请输入用户名" />

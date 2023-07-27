@@ -63,6 +63,7 @@ export default defineComponent({
   },
 
   setup(props, { slots, expose }) {
+    const toast = useToast();
     const seed = Math.random().toString(36).substring(7);
     const bus = useEventBus<FormEvent>(`form-${seed}`);
 
@@ -98,6 +99,13 @@ export default defineComponent({
 
     async function validate(state: any) {
       errors.value = await getErrors(state);
+      const firstError = errors.value[0];
+      if (firstError && firstError.path === "") {
+        toast.add({
+          color: "red",
+          title: firstError.message,
+        });
+      }
       if (errors.value.length > 0) {
         throw new Error(
           `Form validation failed: ${JSON.stringify(errors.value, null, 2)}`
