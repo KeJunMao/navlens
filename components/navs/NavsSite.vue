@@ -6,6 +6,9 @@ const firstUrl = computed(() => props.site.urls[0]);
 const onlyOne = computed(() => props.site.urls.length === 1);
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 const { view } = uselastVisitedLinks();
+const showQrcode = computed(() => {
+  return props.site.showQrcode;
+});
 </script>
 
 <template>
@@ -17,29 +20,47 @@ const { view } = uselastVisitedLinks();
         <NavsIconOrImage :icon="site.icon" :name="site.name" />
         <p>{{ site.name }}</p>
       </div>
-      <div
-        class="text-sm text-gray-500 dark:text-gray-400 truncate"
-
-      >
-      <template v-if="site.description">
-        {{ site.description }}
-      </template>
-      <template v-else>
-        {{ firstUrl.link }}
-      </template>
+      <div class="text-sm text-gray-500 dark:text-gray-400 truncate">
+        <template v-if="site.description">
+          {{ site.description }}
+        </template>
+        <template v-else>
+          {{ firstUrl.link }}
+        </template>
       </div>
       <template v-if="!onlyOne">
         <div class="flex space-x-1">
-          <UTooltip v-for="item in site.urls" :text="item.link" :key="item.id">
-            <UButton
-              @click="view(item)"
-              :to="item.link"
-              target="_blank"
-              size="sm"
-              variant="ghost"
-              >{{ item.label }}</UButton
-            >
-          </UTooltip>
+          <template v-for="item in site.urls" :key="item.id">
+            <UPopover v-if="showQrcode" mode="hover">
+              <UButton
+                @click="view(item)"
+                :to="item.link"
+                target="_blank"
+                size="sm"
+                variant="ghost"
+                >{{ item.label || "未命名" }}</UButton
+              >
+              <template #panel>
+                <Qrcode :text="firstUrl.link" />
+              </template>
+            </UPopover>
+            <UTooltip v-else :text="item.link">
+              <template #text>
+                <template v-if="showQrcode"> </template>
+                <template v-else>
+                  {{ item.link }}
+                </template>
+              </template>
+              <UButton
+                @click="view(item)"
+                :to="item.link"
+                target="_blank"
+                size="sm"
+                variant="ghost"
+                >{{ item.label || "未命名" }}</UButton
+              >
+            </UTooltip>
+          </template>
         </div>
       </template>
     </div>
@@ -52,7 +73,14 @@ const { view } = uselastVisitedLinks();
       target="_blank"
       class="h-full"
     >
+      <UPopover v-if="showQrcode" mode="hover">
+        <ReuseTemplate />
+        <template #panel>
+          <Qrcode :text="firstUrl.link" />
+        </template>
+      </UPopover>
       <UTooltip
+        v-else
         class="w-full h-full"
         :text="`${firstUrl.label ? firstUrl.label + ':' : ''}${firstUrl.link}`"
       >

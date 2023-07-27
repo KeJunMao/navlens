@@ -131,6 +131,9 @@ const defaultUrl = {
           </UInput>
         </div>
       </UiFormGroup>
+      <UiFormGroup paht="showQrcode" name="showQrcode">
+        <UCheckbox label="悬停显示二维码而非链接" v-model="state.showQrcode" :disabled="isView" />
+      </UiFormGroup>
       <UiFormGroup path="urls">
         <div
           class="flex space-x-2"
