@@ -27,7 +27,7 @@
     "@prisma/client": "5.0.0",
     "@vueuse/core": "^10.2.1",
     "@vueuse/nuxt": "^10.2.1",
-    "pinyin-pro": "^3.16.0",
+    "pinyin-pro": "^3.16.1",
     "qrcode": "^1.5.3",
     "zod": "^3.21.4"
   }

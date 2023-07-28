@@ -15,6 +15,7 @@ model Group {
   code String  @unique
   name String
   icon String?
+  sort Int     @default(0)
 
   categories Category[]
 }
@@ -23,6 +24,7 @@ model Category {
   id   Int     @id @default(autoincrement())
   name String
   icon String?
+  sort Int     @default(0)
 
   sites   CategoriesOnSites[]
   group   Group               @relation(fields: [groupId], references: [id])
@@ -35,7 +37,8 @@ model Site {
   description String?
   icon        String?
   urls        Url[]
-  showQrcode Boolean @default(false)
+  showQrcode  Boolean @default(false)
+  sort        Int     @default(0)
 
   categories CategoriesOnSites[]
 }
@@ -44,13 +47,14 @@ model Url {
   id    Int     @id @default(autoincrement())
   link  String
   label String?
+  sort  Int     @default(0)
 
   Site   Site @relation(fields: [siteId], references: [id])
   siteId Int
 }
 
 model User {
-  id   String @id @default(cuid())
+  id       String @id @default(cuid())
   // unique name
   username String @unique
 

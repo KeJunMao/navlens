@@ -19,7 +19,15 @@ export default defineApi(async (event) => {
                   },
                 },
               },
+              orderBy: {
+                site: {
+                  sort: "asc",
+                },
+              },
             },
+          },
+          orderBy: {
+            sort: "asc",
           },
         },
       },

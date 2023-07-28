@@ -28,6 +28,7 @@ const defaultUrl = {
 
 <template>
   <CRUD
+    model-name="site"
     ref="crud"
     :search-schema="searchSiteDtoSchema"
     :create-schema="createSiteDtoSchema"
@@ -132,7 +133,11 @@ const defaultUrl = {
         </div>
       </UiFormGroup>
       <UiFormGroup paht="showQrcode" name="showQrcode">
-        <UCheckbox label="悬停显示二维码而非链接" v-model="state.showQrcode" :disabled="isView" />
+        <UCheckbox
+          label="悬停显示二维码而非链接"
+          v-model="state.showQrcode"
+          :disabled="isView"
+        />
       </UiFormGroup>
       <UiFormGroup path="urls">
         <div
@@ -163,10 +168,10 @@ const defaultUrl = {
               class="rounded-full"
               icon="i-heroicons-plus-circle"
               @click="
-                state.urls.push({
-                  link: '',
-                  label: '',
+                state.urls.splice(index + 1, 0, {
                   id: hash(new Date()),
+                  label: '',
+                  link: '',
                 })
               "
             ></UButton>

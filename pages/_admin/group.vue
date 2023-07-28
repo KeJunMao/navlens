@@ -11,6 +11,7 @@ const crud = ref<InstanceType<typeof CRUD>>();
 <template>
   <CRUD
     ref="crud"
+    model-name="group"
     :search-schema="searchGroupDtoSchema"
     :create-schema="createGroupDtoSchema"
     api-path="/api/admin/group"

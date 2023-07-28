@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createSiteDtoSchema = z.object({
-  name: z.string().min(1).max(16),
+  name: z.string().min(1).max(28),
   description: z.string().max(64).optional().nullable(),
   icon: z.string().max(64).optional().nullable(),
   categoryIds: z.array(z.coerce.number()).min(1),

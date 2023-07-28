@@ -12,6 +12,7 @@ const props = withDefaults(
     searchSchema: z.AnyZodObject;
     createSchema: z.AnyZodObject;
     apiPath: string;
+    modelName: string;
     columns?: any[];
     defaultSearchState?: Record<string, any>;
     defaultCreateState?: Record<string, any>;
@@ -89,6 +90,48 @@ const acitons = (row: any) => [
       click: () => {
         const { id, ...data } = row;
         showCreateModal(props.copyDataTransform(data));
+      },
+    },
+  ],
+  [
+    {
+      label: "上移一层",
+      icon: "i-heroicons-arrow-up-20-solid",
+      click: async () => {
+        await $fetch(`/api/admin/sort/${props.modelName}/${row.id}/up`, {
+          method: "put",
+        });
+        searchRefresh();
+      },
+    },
+    {
+      label: "下移一层",
+      icon: "i-heroicons-arrow-down-20-solid",
+      click: async () => {
+        await $fetch(`/api/admin/sort/${props.modelName}/${row.id}/down`, {
+          method: "put",
+        });
+        searchRefresh();
+      },
+    },
+    {
+      label: "移到顶层",
+      icon: "i-heroicons-arrow-up-tray",
+      click: async () => {
+        await $fetch(`/api/admin/sort/${props.modelName}/${row.id}/top`, {
+          method: "put",
+        });
+        searchRefresh();
+      },
+    },
+    {
+      label: "移到底层",
+      icon: "i-heroicons-arrow-down-tray",
+      click: async () => {
+        await $fetch(`/api/admin/sort/${props.modelName}/${row.id}/bottom`, {
+          method: "put",
+        });
+        searchRefresh();
       },
     },
   ],

@@ -12,5 +12,8 @@ export default defineApi(async (event) => {
         contains: data.code,
       },
     },
+    orderBy: {
+      sort: "asc",
+    }
   });
 });

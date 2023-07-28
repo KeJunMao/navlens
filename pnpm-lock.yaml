@@ -20,8 +20,8 @@ dependencies:
     specifier: ^10.2.1
     version: 10.2.1(nuxt@3.6.5)(rollup@2.79.1)(vue@3.3.4)
   pinyin-pro:
-    specifier: ^3.16.0
-    version: 3.16.0
+    specifier: ^3.16.1
+    version: 3.16.1
   qrcode:
     specifier: ^1.5.3
     version: 1.5.3
@@ -6976,8 +6976,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /pinyin-pro@3.16.0:
-    resolution: {integrity: sha512-U4pMQ/KSMM5JmSb+ZcReCIbgzGl/JaglaHqWjCli0hpA0rDdjRbAO67e6fOa3ZFcJzbqfe6bJkaMMmpiWmkXgQ==}
+  /pinyin-pro@3.16.1:
+    resolution: {integrity: sha512-Pm5vKjAO7EZ1w39Xw9/yzynNDbqFVWkvgCSPyHvvCCrhWrkeOK//2FvX2uoWb2yUzGTsruUqrAaKySG8TQV/0Q==}
     dev: false
 
   /pirates@4.0.6:

@@ -35,6 +35,9 @@ export default defineApi(async (event) => {
         },
         urls: {},
       },
+      orderBy: {
+        sort: "asc",
+      }
     })
     .then((result) =>
       result.map(({ categories, ...site }) => ({

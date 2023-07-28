@@ -3,6 +3,7 @@ import { Form } from "types";
 
 const { user, signOut } = useAuth();
 const state = ref({
+  // @ts-expect-error ignore
   username: user.value?.username || "",
   password: "",
   repassword: "",

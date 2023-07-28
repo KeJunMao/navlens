@@ -27,6 +27,7 @@ const search = async (q: string) => {
     ref="crud"
     :search-schema="searchCategoryDtoSchema"
     :create-schema="createCategoryDtoSchema"
+    model-name="category"
     api-path="/api/admin/category"
     :viewDataTransform="(data: any)=> ({
       ...data,

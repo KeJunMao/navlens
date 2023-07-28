@@ -22,6 +22,9 @@ export default defineApi(async (event) => {
           },
         },
       },
+      orderBy: {
+        sort: "asc",
+      }
     })
     .then((v) =>
       v.map(({ group, ...category }) => {
