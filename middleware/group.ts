@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware(async ({ params }) => {
+export default defineNuxtRouteMiddleware(async ({ params, hash }) => {
   const { group: groupCode } = params;
   if (!groupCode) {
     throw createError({
@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(async ({ params }) => {
   }
   const groups = useGroups();
   const group = useGroup();
-  if (group.value?.code === groupCode){
+  if (group.value?.code === groupCode && hash){
     return
   }
   const { data } = await useFetch("/api/group");
