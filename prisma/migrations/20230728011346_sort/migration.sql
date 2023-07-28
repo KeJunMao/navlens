@@ -8,8 +8,11 @@ CREATE TABLE "new_Group" (
     "sort" INTEGER NOT NULL DEFAULT 0
 );
 INSERT INTO "new_Group" ("code", "icon", "id", "name") SELECT "code", "icon", "id", "name" FROM "Group";
+
+UPDATE "new_Group" SET sort = 0;
 UPDATE "new_Group"
-SET sort = (SELECT COUNT(*) FROM "new_Group" s2 WHERE s2.sort >= "new_Group".sort);
+SET sort = (SELECT COUNT(*) FROM "new_Group" t WHERE t.sort <= "new_Group".sort);
+
 DROP TABLE "Group";
 ALTER TABLE "new_Group" RENAME TO "Group";
 CREATE UNIQUE INDEX "Group_code_key" ON "Group"("code");
@@ -22,8 +25,10 @@ CREATE TABLE "new_Category" (
     CONSTRAINT "Category_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 INSERT INTO "new_Category" ("groupId", "icon", "id", "name") SELECT "groupId", "icon", "id", "name" FROM "Category";
+UPDATE "new_Category" SET sort = 0;
 UPDATE "new_Category"
-SET sort = (SELECT COUNT(*) FROM "new_Category" s2 WHERE s2.sort >= "new_Category".sort);
+SET sort = (SELECT COUNT(*) FROM "new_Category" t WHERE t.sort <= "new_Category".sort);
+
 DROP TABLE "Category";
 ALTER TABLE "new_Category" RENAME TO "Category";
 CREATE TABLE "new_Url" (
@@ -35,8 +40,9 @@ CREATE TABLE "new_Url" (
     CONSTRAINT "Url_siteId_fkey" FOREIGN KEY ("siteId") REFERENCES "Site" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 INSERT INTO "new_Url" ("id", "label", "link", "siteId") SELECT "id", "label", "link", "siteId" FROM "Url";
+UPDATE "new_Url" SET sort = 0;
 UPDATE "new_Url"
-SET sort = (SELECT COUNT(*) FROM "new_Url" s2 WHERE s2.sort >= "new_Url".sort);
+SET sort = (SELECT COUNT(*) FROM "new_Url" t WHERE t.sort <= "new_Url".sort);
 DROP TABLE "Url";
 ALTER TABLE "new_Url" RENAME TO "Url";
 CREATE TABLE "new_Site" (
@@ -48,8 +54,9 @@ CREATE TABLE "new_Site" (
     "sort" INTEGER NOT NULL DEFAULT 0
 );
 INSERT INTO "new_Site" ("description", "icon", "id", "name", "showQrcode") SELECT "description", "icon", "id", "name", "showQrcode" FROM "Site";
+UPDATE "new_Site" SET sort = 0;
 UPDATE "new_Site"
-SET sort = (SELECT COUNT(*) FROM "new_Site" s2 WHERE s2.sort >= "new_Site".sort);
+SET sort = (SELECT COUNT(*) FROM "new_Site" t WHERE t.sort <= "new_Site".sort);
 DROP TABLE "Site";
 ALTER TABLE "new_Site" RENAME TO "Site";
 PRAGMA foreign_key_check;
