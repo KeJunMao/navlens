@@ -10,7 +10,7 @@
 <br>
 <p align="center">
   <a style="text-decoration:none" href="https://github.com/KeJunMao" target="_blank">
-    <img src="https://img.shields.io/badge/Author-KeJun-00db80" alt="Author" />
+    <img src="https://img.shields.io/badge/Author-KeJun-fb923c" alt="Author" />
   </a>
 </p>
 
