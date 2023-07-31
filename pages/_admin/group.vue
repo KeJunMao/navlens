@@ -15,6 +15,28 @@ const crud = ref<InstanceType<typeof CRUD>>();
     :search-schema="searchGroupDtoSchema"
     :create-schema="createGroupDtoSchema"
     api-path="/api/admin/group"
+    :columns="[
+      {
+        key: 'id',
+        label: 'ID',
+      },
+      {
+        key: 'name',
+        label: '名称',
+      },
+      {
+        key: 'code',
+        label: '编码',
+      },
+      {
+        key: 'icon',
+        label: '图标',
+      },
+      {
+        key: 'sort',
+        label: '排序',
+      },
+    ]"
   >
     <template #search="{ state }">
       <UFormGroup label="名称" path="name">

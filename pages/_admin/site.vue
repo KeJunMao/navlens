@@ -60,15 +60,19 @@ const defaultUrl = {
       },
       {
         key: 'name',
-        label: 'Name',
+        label: '名称',
       },
       {
         key: 'description',
-        label: 'Description',
+        label: '简介',
       },
       {
         key: 'icon',
-        label: 'Icon',
+        label: '图标',
+      },
+      {
+        key: 'sort',
+        label: '排序',
       },
     ]"
   >
@@ -186,6 +190,9 @@ const defaultUrl = {
           </div>
         </div>
       </UiFormGroup>
+    </template>
+    <template #table-description-data="{ row }">
+      {{ row.description || '暂无简介' }}
     </template>
   </CRUD>
 </template>

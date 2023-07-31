@@ -40,6 +40,28 @@ const search = async (q: string) => {
       ...data,
       groupId: group?.id
     })"
+        :columns="[
+      {
+        key: 'id',
+        label: 'ID',
+      },
+      {
+        key: 'name',
+        label: '名称',
+      },
+      {
+        key: 'groupName',
+        label: '所属组',
+      },
+      {
+        key: 'icon',
+        label: '图标',
+      },
+      {
+        key: 'sort',
+        label: '排序',
+      },
+    ]"
   >
     <template #search="{ state }">
       <UiFormGroup label="名称" path="name">
