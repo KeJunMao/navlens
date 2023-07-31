@@ -89,10 +89,10 @@ export async function moveToTop(model: any, id: number) {
       message: "Not found",
     });
   }
-
   const topData = await model.findFirst({
     orderBy: { sort: "asc" },
   });
+
   if (topData.id === data.id) {
     throw createError({
       status: 400,
@@ -100,7 +100,21 @@ export async function moveToTop(model: any, id: number) {
     });
   }
 
-  return await swapSort(model, data, topData);
+  await model.updateMany({
+    where: { sort: { lt: data.sort } },
+    data: {
+      sort: {
+        increment: 1,
+      },
+    },
+  });
+
+  return model.update({
+    where: { id: data.id },
+    data: {
+      sort: topData.sort,
+    },
+  });
 }
 
 export async function moveToBottom(model: any, id: number) {
@@ -124,5 +138,20 @@ export async function moveToBottom(model: any, id: number) {
       message: "No Data to move bottom.",
     });
   }
-  return await swapSort(model, data, bottomData);
+
+  await model.updateMany({
+    where: { sort: { gt: data.sort } },
+    data: {
+      sort: {
+        decrement: 1,
+      },
+    },
+  });
+
+  return model.update({
+    where: { id: data.id },
+    data: {
+      sort: bottomData.sort,
+    },
+  });
 }
