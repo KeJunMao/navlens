@@ -1,6 +1,6 @@
 import { Url } from "@prisma/client";
 
-export function uselastVisitedLinks() {
+export function useLastVisitedLinks() {
   const group = useGroup();
   const sites = computed(() =>
     group.value?.categories

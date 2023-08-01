@@ -14,7 +14,7 @@ const group = useGroup();
 const categories = computed(() => group.value?.categories);
 const route = useRoute();
 const isInAdmin = computed(() => route.path.startsWith("/_admin"));
-const { links, view } = uselastVisitedLinks();
+const { links, view } = useLastVisitedLinks();
 const commandsGroup = computed(() => {
   return {
     key: "commands",

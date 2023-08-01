@@ -1,14 +1,19 @@
 <script lang="ts" setup>
+import { Url } from "@prisma/client";
+
 const props = defineProps<{
   site: any;
 }>();
 const firstUrl = computed(() => props.site.urls[0]);
 const onlyOne = computed(() => props.site.urls.length === 1);
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
-const { view } = uselastVisitedLinks();
-const showQrcode = computed(() => {
+const { view } = useLastVisitedLinks();
+const showQRcode = computed(() => {
   return props.site.showQrcode;
 });
+function handleClickLink(event: MouseEvent, link: Url) {
+  view(link);
+}
 </script>
 
 <template>
@@ -31,9 +36,9 @@ const showQrcode = computed(() => {
       <template v-if="!onlyOne">
         <div class="flex space-x-1">
           <template v-for="item in site.urls" :key="item.id">
-            <UPopover v-if="showQrcode" mode="hover">
+            <UPopover v-if="showQRcode" mode="hover">
               <UButton
-                @click="view(item)"
+                @click="handleClickLink($event, item)"
                 :to="item.link"
                 target="_blank"
                 size="sm"
@@ -46,7 +51,7 @@ const showQrcode = computed(() => {
             </UPopover>
             <UTooltip v-else :text="item.link">
               <template #text>
-                <template v-if="showQrcode"> </template>
+                <template v-if="showQRcode"> </template>
                 <template v-else>
                   {{ item.link }}
                 </template>
@@ -67,16 +72,16 @@ const showQrcode = computed(() => {
   </DefineTemplate>
   <template v-if="onlyOne">
     <NuxtLink
-      @click="view(firstUrl)"
+      @click="handleClickLink($event, firstUrl)"
       :id="`site-${site.id}`"
       :to="onlyOne ? firstUrl?.link : false"
       target="_blank"
       class="h-full"
     >
-      <UPopover v-if="showQrcode" mode="hover">
+      <UPopover v-if="showQRcode" mode="hover">
         <ReuseTemplate />
         <template #panel>
-          <Qrcode :text="firstUrl.link" />
+          <QRcode :text="firstUrl.link" />
         </template>
       </UPopover>
       <UTooltip
