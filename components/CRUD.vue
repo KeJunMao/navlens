@@ -82,10 +82,10 @@ const tableColumns = computed(() => {
 const acitons = (row: any) => [
   [
     {
-      label: "编辑",
-      icon: "i-heroicons-pencil-square-20-solid",
+      label: "查看",
+      icon: "i-heroicons-eye-20-solid",
       click: () => {
-        showUpdateModal(row);
+        showViewModal(row);
       },
     },
     {
@@ -306,10 +306,10 @@ defineExpose({
           <UButton
             color="gray"
             variant="ghost"
-            icon="i-heroicons-eye-20-solid"
-            @click="showViewModal(row)"
+            icon="i-heroicons-pencil-square-20-solid"
+            @click="showUpdateModal(row)"
           >
-            查看
+            编辑
           </UButton>
           <UDropdown :items="acitons(row)">
             <UButton

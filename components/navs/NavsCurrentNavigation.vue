@@ -26,7 +26,7 @@ const appConfig = useAppConfig();
       }"
     >
       <template #default="{ item, open }">
-        <ULink
+        <ULinkCustom
           class="flex items-center gap-2 group mb-3 w-full"
           active-class="text-primary-500 dark:text-primary-400 border-current"
           inactive-class="text-gray-900 dark:text-gray-200 border-transparent"
@@ -44,7 +44,7 @@ const appConfig = useAppConfig();
             class="w-5 h-5 ms-auto transform transition-transform duration-200 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200"
             :class="[open ? 'text-gray-900 dark:text-gray-200' : '-rotate-90']"
           />
-        </ULink>
+        </ULinkCustom>
       </template>
       <!-- @vue-skip -->
       <template
