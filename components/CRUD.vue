@@ -41,15 +41,22 @@ type searchSchema = z.output<typeof props.searchSchema>;
 const searchForm = ref<Form<searchSchema>>();
 const searchState = ref<Record<string, any>>({ ...props.defaultSearchState });
 const page = ref(1);
-const pageSize = 10;
+const pageSize = 1;
+const searchQuery = computed(() => ({
+  ...searchState.value,
+  take: pageSize,
+  skip: page.value - 1,
+}));
 const {
   data: searchData,
   refresh: searchRefresh,
   pending: searchLoading,
 } = useFetch<any>(props.apiPath, {
-  query: { ...searchState.value, take: pageSize, skip: page.value - 1 },
+  query: searchQuery,
   watch: false,
 });
+
+watch(page, () => searchRefresh());
 
 const total = computed(() => searchData.value?.pagination.total ?? 0);
 const tableRows = computed(() => searchData.value?.result);
@@ -58,6 +65,7 @@ async function searchSubmit() {
   if (searchForm.value) {
     await searchForm.value!.validate();
   }
+  page.value = 1
   emit("search", searchState.value);
   searchRefresh();
 }
