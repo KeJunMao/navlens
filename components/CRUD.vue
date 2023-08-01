@@ -41,7 +41,7 @@ type searchSchema = z.output<typeof props.searchSchema>;
 const searchForm = ref<Form<searchSchema>>();
 const searchState = ref<Record<string, any>>({ ...props.defaultSearchState });
 const page = ref(1);
-const pageSize = 1;
+const pageSize = 10;
 const searchQuery = computed(() => ({
   ...searchState.value,
   take: pageSize,
