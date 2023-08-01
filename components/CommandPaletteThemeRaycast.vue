@@ -85,7 +85,7 @@ const siteGroup = computed<Group[]>(() => {
               const sitePinyin = pinyin(site.name, {
                 toneType: "none",
                 type: "array",
-              }).join("");
+              });
               let icon: string, avatar: any;
               if (site.icon?.startsWith("http")) {
                 avatar = {
@@ -98,8 +98,10 @@ const siteGroup = computed<Group[]>(() => {
               return site.urls.map((url) => {
                 return {
                   description: site.description,
-                  sitePinyin: sitePinyin,
-                  urlPinyin: pinyin(url.label ?? "", {
+                  siteNamePinyin: sitePinyin.join(""),
+                  // 缩写
+                  siteNameSuoXiePinyin: sitePinyin.map((v) => v[0]).join(""),
+                  urlLabelPinyin: pinyin(url.label ?? "", {
                     toneType: "none",
                     type: "array",
                   }).join(""),
@@ -256,7 +258,14 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
         includeMatches: true,
         useExtendedSearch: true,
         threshold: 0,
-        keys: ['label', 'suffix', 'description', 'sitePinyin', 'urlPinyin'],
+        keys: [
+          'label',
+          'suffix',
+          'description',
+          'siteNamePinyin',
+          'siteNameSuoXiePinyin',
+          'urlLabelPinyin',
+        ],
       },
       resultLimit: 10,
     }"
