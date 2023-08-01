@@ -46,7 +46,7 @@ function handleClickLink(event: MouseEvent, link: Url) {
                 >{{ item.label || "未命名" }}</UButton
               >
               <template #panel>
-                <Qrcode :text="firstUrl.link" />
+                <QRcode :text="firstUrl.link" />
               </template>
             </UPopover>
             <UTooltip v-else :text="item.link">
