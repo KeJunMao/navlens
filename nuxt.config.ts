@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   typescript: {
     shim: false,
   },
+  app: {
+    layoutTransition: { name: 'layout', mode: 'out-in' }
+  },
   alias: {
     cookie: resolve(__dirname, "node_modules/cookie"),
     jose: resolve(__dirname, "node_modules/jose/dist/browser/index.js"),

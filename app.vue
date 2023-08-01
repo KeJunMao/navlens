@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 useHead({
-  titleTemplate: (title = 'NavLens') =>
+  titleTemplate: (title = "NavLens") =>
     title && title.includes("NavLens") ? title : `${title} - NavLens`,
   bodyAttrs: {
     class:
@@ -20,3 +20,15 @@ useHead({
   },
 });
 </script>
+
+<style>
+.layout-enter-active,
+.layout-leave-active {
+  transition: all 0.4s;
+}
+.layout-enter-from,
+.layout-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
+</style>
