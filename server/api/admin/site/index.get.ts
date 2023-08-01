@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 export default defineApi(async (event) => {
   const prisma = usePrisma();
-  const data = searchSiteDtoSchema.parse(getQuery(event));
+  const { take, skip, ...data } = searchSiteDtoSchema.parse(getQuery(event));
   const query: Prisma.SiteFindManyArgs = {
     where: {
       name: {
@@ -40,7 +40,7 @@ export default defineApi(async (event) => {
   };
 
   const [result, total] = await prisma.$transaction([
-    prisma.site.findMany(query),
+    prisma.site.findMany({ ...query, skip, take }),
     prisma.site.count({ where: query.where }),
   ]);
 
@@ -51,7 +51,7 @@ export default defineApi(async (event) => {
     // @ts-expect-error ignore
     result: result.map(({ categories, ...site }) => ({
       ...site,
-      categories: categories.map(({ category }) => ({
+      categories: categories.map(({ category }: any) => ({
         ...category,
       })),
     })),

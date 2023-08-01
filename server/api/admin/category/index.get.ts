@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 export default defineApi(async (event) => {
   const prisma = usePrisma();
-  const data = searchCategoryDtoSchema.parse(getQuery(event));
+  const { take, skip, ...data } = searchCategoryDtoSchema.parse(getQuery(event));
 
   const query: Prisma.CategoryFindManyArgs = {
     where: {
@@ -28,7 +28,7 @@ export default defineApi(async (event) => {
   };
 
   const [result, total] = await prisma.$transaction([
-    prisma.category.findMany(query),
+    prisma.category.findMany({ ...query, skip, take }),
     prisma.category.count({ where: query.where }),
   ]);
 
