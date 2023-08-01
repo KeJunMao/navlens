@@ -10,7 +10,7 @@ useSeoMeta({
 const crud = ref<InstanceType<typeof CRUD>>();
 
 const search = async (q: string) => {
-  const groups = await $fetch("/api/admin/category", {
+  const { result: groups } = await $fetch("/api/admin/category", {
     query: { name: q },
   });
 

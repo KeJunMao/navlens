@@ -11,7 +11,7 @@ useSeoMeta({
 });
 
 const search = async (q: string) => {
-  const groups = await $fetch("/api/admin/group", {
+  const { result: groups } = await $fetch("/api/admin/group", {
     query: { name: q },
   });
 
@@ -40,7 +40,7 @@ const search = async (q: string) => {
       ...data,
       groupId: group?.id
     })"
-        :columns="[
+    :columns="[
       {
         key: 'id',
         label: 'ID',
