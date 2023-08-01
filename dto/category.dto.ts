@@ -11,4 +11,6 @@ export type CreateCategoryDto = z.infer<typeof createCategoryDtoSchema>;
 export const searchCategoryDtoSchema = z.object({
   name: z.string().max(16).optional(),
   groupName: z.string().max(16).optional(),
+  take: z.coerce.number().optional(),
+  skip: z.coerce.number().optional(),
 });

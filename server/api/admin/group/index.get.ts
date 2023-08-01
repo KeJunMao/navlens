@@ -1,9 +1,10 @@
+import { Prisma } from "@prisma/client";
+
 export default defineApi(async (event) => {
   const prisma = usePrisma();
-  const query = getQuery(event);
-  const data = searchGroupDtoSchema.parse(query);
+  const data = searchGroupDtoSchema.parse(getQuery(event));
 
-  return prisma.group.findMany({
+  const query: Prisma.GroupFindManyArgs = {
     where: {
       name: {
         contains: data.name,
@@ -14,6 +15,17 @@ export default defineApi(async (event) => {
     },
     orderBy: {
       sort: "asc",
-    }
-  });
+    },
+  };
+
+  const [result, total] = await prisma.$transaction([
+    prisma.group.findMany(query),
+    prisma.group.count({ where: query.where })
+  ]);
+  return {
+    pagination: {
+      total
+    },
+    result
+  };
 });

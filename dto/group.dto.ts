@@ -11,4 +11,6 @@ export type CreateGroupDto = z.infer<typeof createGroupDtoSchema>;
 export const searchGroupDtoSchema = z.object({
   name: z.string().max(16).optional(),
   code: z.string().max(16).optional(),
+  take: z.coerce.number().optional(),
+  skip: z.coerce.number().optional(),
 });

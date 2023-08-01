@@ -23,4 +23,6 @@ export const searchSiteDtoSchema = z.object({
   name: z.string().max(16).optional(),
   description: z.string().max(20).optional(),
   categoryName: z.string().max(16).optional(),
+  take: z.coerce.number().optional(),
+  skip: z.coerce.number().optional(),
 });

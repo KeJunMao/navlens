@@ -40,15 +40,19 @@ const current = getCurrentInstance();
 type searchSchema = z.output<typeof props.searchSchema>;
 const searchForm = ref<Form<searchSchema>>();
 const searchState = ref<Record<string, any>>({ ...props.defaultSearchState });
-
+const page = ref(1);
+const pageSize = 10;
 const {
-  data: tableRows,
+  data: searchData,
   refresh: searchRefresh,
   pending: searchLoading,
 } = useFetch<any>(props.apiPath, {
-  query: searchState.value,
+  query: { ...searchState.value, take: pageSize, skip: page.value - 1 },
   watch: false,
 });
+
+const total = computed(() => searchData.value?.pagination.total ?? 0);
+const tableRows = computed(() => searchData.value?.result);
 
 async function searchSubmit() {
   if (searchForm.value) {
@@ -320,6 +324,9 @@ defineExpose({
         <slot :name="'table-' + name" v-bind="slotData" />
       </template>
     </UTable>
+    <template #footer>
+      <UPagination v-model="page" :page-count="pageSize" :total="total" />
+    </template>
   </UCard>
   <UModal v-model="createModalState.show">
     <UCard>
