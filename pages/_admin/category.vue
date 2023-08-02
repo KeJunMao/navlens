@@ -14,12 +14,19 @@ const search = async (q: string) => {
   const { result: groups } = await $fetch("/api/admin/group", {
     query: { name: q },
   });
-
-  return groups?.map((group: any) => ({
-    id: group.id,
-    label: group.name,
+  return groups?.map(({ name, id }: any) => ({
+    id,
+    name,
   }));
 };
+
+const groupSelect = ref();
+function computedGroupName(id: any) {
+  return (
+    groupSelect.value?.filteredOptions?.find((v: any) => v.id === id)?.name ??
+    "无效分组"
+  );
+}
 </script>
 
 <template>
@@ -29,17 +36,6 @@ const search = async (q: string) => {
     :create-schema="createCategoryDtoSchema"
     model-name="category"
     api-path="/api/admin/category"
-    :viewDataTransform="(data: any)=> ({
-      ...data,
-      group: data.groupId ? {
-        id: data.groupId,
-        label: data.groupName,
-      } : null
-    })"
-    :saveDataTransform="({group={}, ...data}: any)=> ({
-      ...data,
-      groupId: group?.id
-    })"
     :columns="[
       {
         key: 'id',
@@ -64,34 +60,41 @@ const search = async (q: string) => {
     ]"
   >
     <template #search="{ state }">
-      <UiFormGroup label="名称" path="name">
+      <UFormGroup label="名称" name="name">
         <UInput placeholder="请输入名称" v-model="state.name" />
-      </UiFormGroup>
-      <UFormGroup label="所属组名称" path="groupName">
+      </UFormGroup>
+      <UFormGroup label="所属组名称" name="groupName">
         <UInput placeholder="请输入所属组名称" v-model="state.groupName" />
       </UFormGroup>
     </template>
     <template #create="{ state, isView }">
-      <UiFormGroup label="名称" path="name">
+      <UFormGroup label="名称" name="name">
         <UInput
           placeholder="请输入名称"
           v-model="state.name"
           :readonly="isView"
         />
-      </UiFormGroup>
-      <UiFormGroup name="group" label="分组" path="groupId">
+      </UFormGroup>
+      <UFormGroup name="groupId" label="分组">
+        {{ state }}
         <template v-if="isView">
           <UInput :value="state.groupName" readonly />
         </template>
         <USelectMenu
           v-else
-          v-model="state.group"
+          ref="groupSelect"
+          v-model="state.groupId"
+          value-attribute="id"
+          option-attribute="name"
           :searchable="search"
           placeholder="请搜索并选择分组"
-          by="id"
-        />
-      </UiFormGroup>
-      <UiFormGroup
+        >
+          <template #label v-if="state.groupId !== undefined">
+            {{ computedGroupName(state.groupId) }}
+          </template>
+        </USelectMenu>
+      </UFormGroup>
+      <UFormGroup
         label="图标"
         path="icon"
         description="访问 https://icones.js.org 预览所有图标"
@@ -101,7 +104,7 @@ const search = async (q: string) => {
           v-model="state.icon"
           :readonly="isView"
         />
-      </UiFormGroup>
+      </UFormGroup>
     </template>
   </CRUD>
 </template>

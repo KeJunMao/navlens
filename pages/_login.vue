@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Form } from "types/form";
 const { signIn } = useAuth();
+import { LoginDtoSchema } from '@/dto/profile.dto'
 
 definePageMeta({
   layout: "setup",
@@ -18,6 +19,7 @@ const state = ref({
 });
 
 async function loginSubmit() {
+  await form.value!.validate()
   try {
     loading.value = true;
     await signIn("credentials", state.value);
@@ -40,22 +42,23 @@ async function loginSubmit() {
     <p class="text-gray-500 dark:text-gray-400">
       可以在后台管理导航应用
     </p>
-    <UiForm
+    <UForm
       ref="form"
       :state="state"
+      :schema="LoginDtoSchema"
       class="space-y-4 max-w-lg mt-4"
       @submit.prevent.stop="loginSubmit"
     >
-      <UiFormGroup name="username" path="username" label="用户名">
+      <UFormGroup name="username" label="用户名">
         <UInput v-model="state.username" placeholder="请输入用户名" />
-      </UiFormGroup>
-      <UiFormGroup name="password" path="password" label="密码">
+      </UFormGroup>
+      <UFormGroup name="password" label="密码">
         <UInput
           v-model="state.password"
           type="password"
           placeholder="请输入密码"
         />
-      </UiFormGroup>
+      </UFormGroup>
       <UButton
         class="flex-1 justify-center"
         block
@@ -65,6 +68,6 @@ async function loginSubmit() {
         :disabled="isFinished"
         >登录</UButton
       >
-    </UiForm>
+    </UForm>
   </div>
 </template>

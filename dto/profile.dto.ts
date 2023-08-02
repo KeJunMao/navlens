@@ -9,3 +9,8 @@ export const updateUserDtoSchema = z
   .refine((data) => data.password === data.repassword, {
     message: "两次密码输入不一致",
   });
+
+export const LoginDtoSchema = z.object({
+  username: z.string().min(1).max(16),
+  password: z.string().min(6).max(16),
+})

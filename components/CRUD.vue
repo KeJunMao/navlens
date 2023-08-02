@@ -270,7 +270,7 @@ defineExpose({
 <template>
   <UCard class="max-w-[calc(100vw-32px)]">
     <template #header>
-      <UiForm
+      <UForm
         ref="searchForm"
         :state="searchState"
         :schema="searchSchema"
@@ -296,7 +296,7 @@ defineExpose({
             </UButton>
           </div>
         </div>
-      </UiForm>
+      </UForm>
     </template>
 
     <UTable
@@ -339,7 +339,7 @@ defineExpose({
   <UModal v-model="createModalState.show">
     <UCard>
       <template #header> {{ createModalTitle }} </template>
-      <UiForm
+      <UForm
         ref="createForm"
         :state="createState"
         :schema="createSchema"
@@ -380,7 +380,7 @@ defineExpose({
             关闭
           </UButton>
         </UFormGroup>
-      </UiForm>
+      </UForm>
     </UCard>
   </UModal>
 </template>

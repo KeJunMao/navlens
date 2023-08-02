@@ -10,5 +10,8 @@
     "className",
     "ngClass",
     "ui"
+  ],
+  "cSpell.words": [
+    "navlens"
   ]
 }

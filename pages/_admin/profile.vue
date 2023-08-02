@@ -28,27 +28,27 @@ async function updateSubmit() {
 <template>
   <UCard>
     <template #header> {{ state.username }} 账户 </template>
-    <UiForm
+    <UForm
       ref="form"
       :state="state"
       class="space-y-2"
       :schema="updateUserDtoSchema"
       @submit.prevent.stop="updateSubmit"
     >
-      <UiFormGroup label="用户名" path="username">
+      <UFormGroup label="用户名" name="username">
         <UInput type="text" placeholder="请输入名称" v-model="state.username" />
-      </UiFormGroup>
-      <UiFormGroup label="修改密码" path="password">
+      </UFormGroup>
+      <UFormGroup label="修改密码" name="password">
         <UInput type="password" placeholder="请输入密码" v-model="state.password" />
-      </UiFormGroup>
-      <UiFormGroup label="确认密码" path="repassword">
+      </UFormGroup>
+      <UFormGroup label="确认密码" name="repassword">
         <UInput
           type="password"
           placeholder="请再次输入密码"
           v-model="state.repassword"
         />
-      </UiFormGroup>
+      </UFormGroup>
       <UButton type="submit">保存</UButton>
-    </UiForm>
+    </UForm>
   </UCard>
 </template>

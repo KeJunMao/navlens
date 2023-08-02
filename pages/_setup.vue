@@ -59,7 +59,7 @@ async function setupSubmit() {
       <br />
       稍后你可以在后台随意修改
     </p>
-    <UiForm
+    <UForm
       ref="form"
       :state="state"
       class="space-y-4 max-w-lg mt-4"
@@ -67,24 +67,24 @@ async function setupSubmit() {
       :schema="step === 0 ? setupUserDtoSchema : setupUrlDtoSchema"
     >
       <template v-if="step === 0">
-        <UiFormGroup name="username" path="username" label="用户名">
+        <UFormGroup name="username" label="用户名">
           <UInput v-model="state.username" placeholder="请输入用户名" />
-        </UiFormGroup>
-        <UiFormGroup name="password" path="password" label="密码">
+        </UFormGroup>
+        <UFormGroup name="password" label="密码">
           <UInput
             v-model="state.password"
             type="password"
             placeholder="请输入密码"
           />
-        </UiFormGroup>
-        <UiFormGroup name="repassword" path="repassword" label="确认密码">
+        </UFormGroup>
+        <UFormGroup name="repassword" label="确认密码">
           <UInput
             v-model="state.repassword"
             type="password"
             placeholder="请再次输入密码"
           />
-        </UiFormGroup>
-        <UiFormGroup>
+        </UFormGroup>
+        <UFormGroup>
           <UButton
             block
             @click="
@@ -95,15 +95,15 @@ async function setupSubmit() {
             "
             >下一步</UButton
           >
-        </UiFormGroup>
+        </UFormGroup>
       </template>
       <template v-else>
-        <UiFormGroup name="name" path="name" label="应用名称">
+        <UFormGroup name="name" label="应用名称">
           <UInput v-model="state.name" placeholder="请输入应用名称" />
-        </UiFormGroup>
-        <UiFormGroup name="urlLink" path="url" label="应用网址">
+        </UFormGroup>
+        <UFormGroup name="url" label="应用网址">
           <UInput v-model="state.url" placeholder="请输入应用网址" />
-        </UiFormGroup>
+        </UFormGroup>
         <div class="flex space-x-2">
           <UButton color="white" @click="step--">上一步</UButton>
           <UButton
@@ -116,6 +116,6 @@ async function setupSubmit() {
           >
         </div>
       </template>
-    </UiForm>
+    </UForm>
   </div>
 </template>
