@@ -35,7 +35,7 @@ const defaultUrl = () => ({
     :viewDataTransform="(data: any)=> ({
       ...data,
       categoryIds: data.categories ?  data.categories.map((v:any)=>v.id) : [],
-      urls: data.urls ?  data.urls : [defaultUrl]
+      urls: data.urls ?  data.urls : [defaultUrl()]
     })"
     :copyDataTransform="(data: any)=> ({
       ...data,

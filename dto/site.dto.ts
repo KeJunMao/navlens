@@ -7,13 +7,12 @@ export const createSiteDtoSchema = z.object({
   categoryIds: z.array(z.coerce.number()).min(1),
   showQrcode: z.boolean().default(false),
   urls: z
-    .array(
-      z.object({
-        id: z.coerce.number().optional(),
-        link: z.string().url(),
-        label: z.string().nullable(),
-      })
-    )
+    .object({
+      id: z.coerce.number().optional(),
+      link: z.string().url(),
+      label: z.string().nullable(),
+    })
+    .array()
     .min(1),
 });
 

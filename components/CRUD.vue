@@ -65,7 +65,7 @@ async function searchSubmit() {
   if (searchForm.value) {
     await searchForm.value!.validate();
   }
-  page.value = 1
+  page.value = 1;
   emit("search", searchState.value);
   searchRefresh();
 }
@@ -195,35 +195,40 @@ const saveLoading = ref(false);
 
 async function createSubmit() {
   const body = props.saveDataTransform?.(createState.value);
-  await createForm.value!.validate(body);
-  const mode = createModalState.value.mode;
-  emit(mode as any, searchState.value);
-
   try {
-    saveLoading.value = true;
-    if (mode === "create") {
-      await $fetch(`${props.apiPath}`, {
-        method: "post",
-        body,
+    await createForm.value!.validate(body);
+    const mode = createModalState.value.mode;
+    emit(mode as any, searchState.value);
+
+    try {
+      saveLoading.value = true;
+      if (mode === "create") {
+        await $fetch(`${props.apiPath}`, {
+          method: "post",
+          body,
+        });
+      } else {
+        await $fetch(`${props.apiPath}/${body.id}`, {
+          method: "put",
+          body,
+        });
+      }
+      searchRefresh();
+      createModalState.value.show = false;
+      toast.add({
+        title: "保存成功",
       });
-    } else {
-      await $fetch(`${props.apiPath}/${body.id}`, {
-        method: "put",
-        body,
+    } catch (error: any) {
+      toast.add({
+        title: "保存失败",
+        description: error.message,
       });
+    } finally {
+      saveLoading.value = false;
     }
-    searchRefresh();
-    createModalState.value.show = false;
-    toast.add({
-      title: "保存成功",
-    });
-  } catch (error: any) {
-    toast.add({
-      title: "保存失败",
-      description: error.message,
-    });
-  } finally {
-    saveLoading.value = false;
+  } catch (error) {
+    console.error(error);
+    return;
   }
 }
 
