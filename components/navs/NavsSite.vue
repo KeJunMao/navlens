@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Url } from "@prisma/client";
+import { QRCode } from '#components'
 
 const props = defineProps<{
   site: any;
@@ -46,7 +47,7 @@ function handleClickLink(event: MouseEvent, link: Url) {
                 >{{ item.label || "未命名" }}</UButton
               >
               <template #panel>
-                <QRcode :text="firstUrl.link" />
+                <QRCode :text="firstUrl.link" />
               </template>
             </UPopover>
             <UTooltip v-else :text="item.link">
@@ -81,7 +82,7 @@ function handleClickLink(event: MouseEvent, link: Url) {
       <UPopover v-if="showQRcode" mode="hover">
         <ReuseTemplate />
         <template #panel>
-          <QRcode :text="firstUrl.link" />
+          <QRCode :text="firstUrl.link" />
         </template>
       </UPopover>
       <UTooltip
