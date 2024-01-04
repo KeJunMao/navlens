@@ -8,7 +8,7 @@ export const createSiteDtoSchema = z.object({
   showQrcode: z.boolean().default(false),
   urls: z
     .object({
-      id: z.coerce.number().optional(),
+      id: z.coerce.number().optional().nullable(),
       link: z.string().url(),
       label: z.string().nullable(),
     })
