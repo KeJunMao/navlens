@@ -44,11 +44,10 @@ const defaultUrl = () => ({
     :saveDataTransform="({categories,urls, ...data}: any)=> ({
       ...data,
       urls: urls.map((data:any)=> {
-        const { id, ...url} = data
-        if (typeof id === 'number'){
-          url.id = id
+        if (typeof data.id !== 'number') {
+            delete data.id
         }
-        return url
+        return data
       })
     })"
     :columns="[
